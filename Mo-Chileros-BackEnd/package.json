@@ -1,0 +1,19 @@
+{
+  "name": "mo-chileros-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmorales-2021186/Mo-Chileros.git"
+  },
+  "author": "Anonymous",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jmorales-2021186/Mo-Chileros/issues"
+  },
+  "homepage": "https://github.com/jmorales-2021186/Mo-Chileros#readme"
+}
