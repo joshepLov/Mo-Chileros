@@ -4,21 +4,52 @@ const User = require('./user.model');
 const { validateData, encrypt, checkPassword } = require('../utils/validate');
 const { createToken } = require('../services/jwt');
 
+//CREACION DE SUPER ADMIN POR DEFECTO/ SOLO EL MANEJA LA APP POR COMPLETO
 
-exports.register = async(req, res)=>{
+exports.adminDefault = async(req,res)=>{
+    try {
+        let data = {
+            DPI: 1234567890123,
+            name: 'SUPER_ADMIN',
+            surname: 'SUPER_ADMIN',
+            email: 'SUPER_ADMIN@kinal.edu.gt',
+            age: 18,
+            password: 'SUPER_ADMIN',
+            phone: '12234521',
+            range: 'EXPERTO',
+            role: 'SUPER_ADMIN',
+            image: ''
+        }
+       // data.password = encrypt(data.password)
+        let user = new User(data);
+        let existUser = await User.findOne({name: data.name})
+        if(!existUser) await user.save();
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+exports.registerClient = async(req, res)=>{
     try{
-        //Capturar el fomulario de registro (Body)
         let data = req.body;
         let params = {
+            DPI: data.DPI,
+            name: data.name,
+            surname: data.surname,
+            email: data.email,
+            age: data.age,
             password: data.password,
+            phone: data.phone,
         }
         let validate = validateData(params);
         if(validate) return res.status(400).send(validate);
-        //Role predefinido
-        data.role = 'CLIENT';
+        data.role = 'MOCHILERO';
+        data.range = 'PRINCIPIANTE'
         //Encriptar contraseña
         data.password = await encrypt(data.password)
         //Guardar la información
+        let existUser = await User.findOne({email: data.name})
+        if(existUser) return res.status(500).send({message: `no se puede crear esta cuenta porque ya existe ese email`})
         let user = new User(data);
         await user.save();
         return res.send({message: 'Account created sucessfully'});

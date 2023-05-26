@@ -29,14 +29,15 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,   //CON ESTO SE LOGUEARÁ 
         required: true
-    }   ,
+    },
     phone: {
         type: String,
         required: true
     },
     range: {
         type: String,
-        required: true
+        required: true,
+        uppercase: true
     },
     role: {
         type: String,
