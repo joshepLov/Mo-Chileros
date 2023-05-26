@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js"
+=======
+    "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> 99edb43b801dfea7f7a9b50f63e519d054b1a943
   },
   "repository": {
     "type": "git",
@@ -16,6 +20,7 @@
   "bugs": {
     "url": "https://github.com/jmorales-2021186/Mo-Chileros/issues"
   },
+<<<<<<< HEAD
   "homepage": "https://github.com/jmorales-2021186/Mo-Chileros#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -31,4 +36,7 @@
   "devDependencies": {
     "nodemon": "^2.0.22"
   }
+=======
+  "homepage": "https://github.com/jmorales-2021186/Mo-Chileros#readme"
+>>>>>>> 99edb43b801dfea7f7a9b50f63e519d054b1a943
 }
