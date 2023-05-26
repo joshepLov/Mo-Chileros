@@ -1,8 +1,8 @@
 'use strict'
 
 require('dotenv').config()
-const mongoConfig = require('./config/mongo')
-const app = require('./config/app')
+const mongoConfig = require('./config/mongo');
+const app = require('./config/app');
 
-mongoConfig.connect()
+mongoConfig.connect();
 app.initServer();

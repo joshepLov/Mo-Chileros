@@ -31,6 +31,9 @@ const transportSchema = mongoose.Schema({
     versionKey: false
 
 
+},
+{
+    versionKey: false
 })
 
 module.exports  = mongoose.model('Transport', transportSchema)
