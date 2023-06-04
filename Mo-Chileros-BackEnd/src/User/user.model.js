@@ -8,6 +8,10 @@ const userScema = mongoose.Schema({
         required : true, 
         maxLength: 13
     }, 
+    username:{
+        type: String,
+        required: true
+    },
     rank :{
         type: Number, 
         required:false

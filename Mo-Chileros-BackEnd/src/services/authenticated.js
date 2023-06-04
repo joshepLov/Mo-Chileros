@@ -25,3 +25,27 @@ exports.ensureAuth=(req, res, next) => {
         next()
     }
 }
+
+exports.isAdmin = async (req, res, next)=>{
+    try {
+        let user = req.user;
+        console.log(user.role)
+        if(user.role !== 'ADMIN')return res.status(403).send({message: 'unauthorized user'});
+        next();
+    } catch (err) {
+        console.error(err);
+        return res.status(403).send({message:'error unauthorized user'})
+    }
+}
+
+exports.isMochilero = async (req, res, next)=>{
+    try {
+        let user = req.user;
+        console.log(user.role)
+        if(user.role !== 'MOCHILERO')return res.status(403).send({message: 'unauthorized user'});
+        next();
+    } catch (err) {
+        console.error(err);
+        return res.status(403).send({message:'error unauthorized user'})
+    }
+}
