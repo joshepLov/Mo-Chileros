@@ -10,5 +10,6 @@ api.get('/test',[ensureAuth,isAdmin], userController.test)
 api.post('/register', userController.register)
 api.post('/login', userController.login)
 api.put ('/updateMochilero/:id/:username',[ensureAuth], userController.UpdateUser )
+api.post('/registerAdmin',[ensureAuth,isAdmin], userController.registerAdmin)
 
 module.exports = api
