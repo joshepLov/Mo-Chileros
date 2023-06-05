@@ -14,6 +14,7 @@ const { createToken } = require("../services/jwt");
 exports.test = async (req, res) => {
   res.send({ message: "test is running" });
 };
+//usuarioAdmin
 
 exports.userDefault = async () => {
   try {
@@ -123,7 +124,6 @@ exports.login = async (req, res) => {
   }
 };
 
-
 // update user
 exports.UpdateUser = async (req, res) => {
   try {
@@ -134,12 +134,12 @@ exports.UpdateUser = async (req, res) => {
     let data = req.body;
     //parametros no permitidos
     let paramsDenied = {
-        email: data?.email,
-        password: data?.password,
-        role: data?.role,
-        rank: data?.rank,
-        history: data?.history,
-      };
+      email: data?.email,
+      password: data?.password,
+      role: data?.role,
+      rank: data?.rank,
+      history: data?.history,
+    };
 
     const hasDeniedParams = Object.values(paramsDenied).some((param) => param !== undefined);
     //validacion de usuario existente
@@ -148,23 +148,24 @@ exports.UpdateUser = async (req, res) => {
     // comprobacion de acceso a perfil
     console.log(userId.sub, paramsUser);
     if (userId.sub == paramsId) {
-        // validacion de parametros denegados
-      if (!hasDeniedParams){
-          let UpdatingUser = await User.findOneAndUpdate(
-            { _id: userId.sub },
-            data,
-            { new: true }
-          );
-          
-          if (!UpdatingUser)
-            return res
-              .status(400)
-              .send({ message: "error updating a user, please check your data" });
-            return res.send({message: "succesful update", UpdatingUser})
-
-      }else if(hasDeniedParams) return res
+      // validacion de parametros denegados
+      if(hasDeniedParams) return res
       .status(422)
       .send({ message: "Have submitted some data that cannot be updated" });
+
+      let UpdatingUser = await User.findOneAndUpdate(
+        { _id: userId.sub },
+        data,
+        { new: true, projection: { _id: 0, password: 0, role: 0 } }
+      );
+
+      if (!UpdatingUser)
+        return res
+          .status(400)
+          .send({ message: "error updating a user, please check your data" });
+            return res.send({message: "succesful update", UpdatingUser})
+
+      
     //actualizacion de usuario
         
     } else {
@@ -176,4 +177,75 @@ exports.UpdateUser = async (req, res) => {
       .status(400)
       .send({ message: "error updating your account, please try later" });
   }
-};
+}
+
+exports.registerAdmin = async (req, res) => {
+  try {
+    //obtener data
+    let data = req.body;
+    let dataAdmin = req.user;
+    let params = {
+      name: data.name,
+      lastname: data.lastname,
+      username: data.username,
+      password: data.password,
+      email: data.email,
+      dpi: data.dpi,
+      phone: data.phone,
+      age: data.age,
+    };
+    let validate = validateData(params);
+    if (validate) return res.status(409).send(validate);
+
+    const createUser = async (data) => {
+      try {
+        let dataValidate = await User.findOne({
+          $or: [
+            { username: data.username },
+            { dpi: data.dpi },
+            { email: data.email },
+          ],
+        });
+
+        // Si no hay un usuario con las mismas credenciales, se crea el usuario
+        if (!dataValidate) {
+          data.password = await encrypt(data.password);
+          let user = new User(data);
+          console.log(user);
+          await user.save();
+          return user;
+        } else {
+          return false;
+        }
+      } catch (err) {
+        return false;
+      }
+    };
+
+    //validar si no hay usuario con estas credenciales
+
+    switch (data.role) {
+    
+      case "MODERADOR":
+        let userRegisted = await createUser(data);
+        if (userRegisted == false) {
+          console.log(userRegisted);
+          return res.status(401).send({
+            message: "Some data is already in our system, check the data",
+          });
+        }
+
+        return res.send({ message: "user created succesfuly", userRegisted });
+
+      default:
+        return res
+          .status(422)
+          .send({ message: "you can not submit this data" });
+    }
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(400)
+      .send({ message: "Error creating your account", error: err.message });
+  }
+}
