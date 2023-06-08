@@ -9,7 +9,8 @@ const {
   prepareDataUser,
 } = require("../utils/validate");
 const { createToken } = require("../services/jwt");
-
+// constante para restringer parametros para mochileros
+const restrictedInfo = "-password -role -email -dpi -phone -email -_id";
 //usuario por defecto
 exports.test = async (req, res) => {
   res.send({ message: "test is running" });
@@ -62,6 +63,7 @@ exports.register = async (req, res) => {
       phone: data.phone,
       age: data.age,
     };
+    //validar parametros obligatorios
     let validate = validateData(params);
     if (validate) return res.status(409).send(validate);
     //validar si no hay usuario con estas credenciales
@@ -141,7 +143,9 @@ exports.UpdateUser = async (req, res) => {
       history: data?.history,
     };
 
-    const hasDeniedParams = Object.values(paramsDenied).some((param) => param !== undefined);
+    const hasDeniedParams = Object.values(paramsDenied).some(
+      (param) => param !== undefined
+    );
     //validacion de usuario existente
     let existsUser = await User.findOne({ _id: paramsId });
     if (!existsUser) return res.status(404).send({ message: "not found user" });
@@ -149,9 +153,10 @@ exports.UpdateUser = async (req, res) => {
     console.log(userId.sub, paramsUser);
     if (userId.sub == paramsId) {
       // validacion de parametros denegados
-      if(hasDeniedParams) return res
-      .status(422)
-      .send({ message: "Have submitted some data that cannot be updated" });
+      if (hasDeniedParams)
+        return res
+          .status(422)
+          .send({ message: "Have submitted some data that cannot be updated" });
 
       let UpdatingUser = await User.findOneAndUpdate(
         { _id: userId.sub },
@@ -163,11 +168,9 @@ exports.UpdateUser = async (req, res) => {
         return res
           .status(400)
           .send({ message: "error updating a user, please check your data" });
-            return res.send({message: "succesful update", UpdatingUser})
+      return res.send({ message: "succesful update", UpdatingUser });
 
-      
-    //actualizacion de usuario
-        
+      //actualizacion de usuario
     } else {
       return res.status(403).send({ message: `you don't have access` });
     }
@@ -177,7 +180,7 @@ exports.UpdateUser = async (req, res) => {
       .status(400)
       .send({ message: "error updating your account, please try later" });
   }
-}
+};
 
 exports.registerAdmin = async (req, res) => {
   try {
@@ -225,7 +228,6 @@ exports.registerAdmin = async (req, res) => {
     //validar si no hay usuario con estas credenciales
 
     switch (data.role) {
-    
       case "MODERADOR":
         let userRegisted = await createUser(data);
         if (userRegisted == false) {
@@ -248,4 +250,49 @@ exports.registerAdmin = async (req, res) => {
       .status(400)
       .send({ message: "Error creating your account", error: err.message });
   }
-}
+};
+
+// Funcion para traer Usuarios
+exports.getUsers = async (req, res) => {
+  try {
+    //datos usuario
+    let userId = req.user;
+    //funcion para Encontrar usuarios segun una instruccion
+    let functionGetUsers = async (prompt) => {
+      let users = await User.find({}).select(prompt);
+      return res.send({ message: "USERS", users });
+    };
+    // validacion, que informacion se puede mostrar al usuario
+    if (userId.role === "ADMIN") {
+      functionGetUsers("-password");
+    } else {
+      functionGetUsers(restrictedInfo);
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({ message: "Error getting user" });
+  }
+};
+
+exports.getUser = async (req, res) => {
+  try {
+    //data 
+    let data = req.params.id
+    let userId = req.user;
+    //funcion para mostrar el usuario segun una instruccion
+    let fuctionShowUser = async(prompt)=>{
+      let userData = await User.findOne({_id:data}).select(prompt)
+      if(!userData)     return res.status(404).send({ message: `User didn't found` });
+      return res.send({userData})
+    }
+    // validacion para mostrar informacion segun el usuario
+    if(userId.role == "ADMIN"){
+      fuctionShowUser('-password')
+    }else{
+      fuctionShowUser(restrictedInfo)
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({ message: "error getting your user" });
+  }
+};

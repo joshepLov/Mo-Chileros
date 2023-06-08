@@ -18,7 +18,7 @@ export const LogInScreen = ({navigation}) => {
     
       const login = async () => {
         try {
-          const response = await axios.post('http://localhost:3418/user/login', log);
+          const response = await axios.post('http://192.168.1.9:3418/user/login', log);
           const data = response.data;
           console.log(data, "23");
     
@@ -31,7 +31,7 @@ export const LogInScreen = ({navigation}) => {
           return ('Error al iniciar sesión');
         }
       };
-      console.log(log)
+     
   return (
     <View style={styles.mainContainer}>
         <View>
