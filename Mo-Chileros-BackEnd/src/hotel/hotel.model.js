@@ -25,7 +25,6 @@ const hotelSchema = mongoose.Schema({
     },
     room:[{
         name: {type: String},
-        size: {type: String},
         capacity: {type: Number},
         price: {type: Number},
         image: {type: String},

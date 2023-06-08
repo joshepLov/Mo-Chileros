@@ -49,3 +49,16 @@ exports.isMochilero = async (req, res, next)=>{
         return res.status(403).send({message:'error unauthorized user'})
     }
 }
+
+//validar moderador o admin, permiso para realizar distintas acciones
+exports.isModerator = async(req,res ,next)=>{
+    try {
+        let user = req.user;
+        console.log(user.role);
+        if(user.role !== 'ADMIN'&& user.role !=='MODERATOR')return res.status(403).send({message: 'unauthorized user'});
+        next();
+    } catch (err) {
+        console.log(err)
+        return res.status(403).send({message: 'error unauthorized user'})
+    }
+}
