@@ -10,6 +10,7 @@ const app = express();
 const port = process.env.PORT
 
 const userRoutes = require('../src/User/user.routes')
+const hotelRoutes = require('../src/hotel/hotel.routes')
 
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(morgan('dev')); 
 
 app.use('/user', userRoutes)
+app.use('/hotel', hotelRoutes)
 
 exports.initServer = ()=>{
     app.listen(port);

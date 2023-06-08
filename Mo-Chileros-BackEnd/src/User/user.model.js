@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose')
 
-const userScema = mongoose.Schema({
+const userSchema = mongoose.Schema({
     dpi:{
         type:Number, 
         required : true, 
@@ -56,4 +56,4 @@ const userScema = mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('User', userScema);
+module.exports = mongoose.model('User', userSchema);

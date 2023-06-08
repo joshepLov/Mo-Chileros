@@ -6,7 +6,6 @@ const {
   validateData,
   encrypt,
   checkPassword,
-  prepareDataUser,
 } = require("../utils/validate");
 const { createToken } = require("../services/jwt");
 // constante para restringer parametros para mochileros
@@ -150,7 +149,6 @@ exports.UpdateUser = async (req, res) => {
     let existsUser = await User.findOne({ _id: paramsId });
     if (!existsUser) return res.status(404).send({ message: "not found user" });
     // comprobacion de acceso a perfil
-    console.log(userId.sub, paramsUser);
     if (userId.sub == paramsId) {
       // validacion de parametros denegados
       if (hasDeniedParams)
