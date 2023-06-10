@@ -7,15 +7,19 @@ const {
   encrypt,
   checkPassword,
 } = require("../utils/validate");
+
 const { createToken } = require("../services/jwt");
+
 // constante para restringer parametros para mochileros
 const restrictedInfo = "-password -role -email -dpi -phone -email -_id";
+
 //usuario por defecto
 exports.test = async (req, res) => {
   res.send({ message: "test is running" });
 };
-//usuarioAdmin
 
+
+//usuarioAdmin
 exports.userDefault = async () => {
   try {
     let data = {
@@ -49,6 +53,7 @@ exports.userDefault = async () => {
 // funcion para que se registre el mochilero(cliente)
 exports.register = async (req, res) => {
   try {
+    
     //obtener data
     let data = req.body;
     console.log();
@@ -62,9 +67,11 @@ exports.register = async (req, res) => {
       phone: data.phone,
       age: data.age,
     };
+   
     //validar parametros obligatorios
     let validate = validateData(params);
     if (validate) return res.status(409).send(validate);
+   
     //validar si no hay usuario con estas credenciales
     let dataValidate = await User.findOne({
       $or: [
@@ -95,12 +102,14 @@ exports.register = async (req, res) => {
 // log in
 exports.login = async (req, res) => {
   try {
+   
     //data
     let data = req.body;
     let credentials = {
       username: data.username,
       password: data.password,
     };
+    
     // validar que vengan los datos
     let validateCredentials = validateData(credentials);
     if (validateCredentials)
@@ -128,11 +137,13 @@ exports.login = async (req, res) => {
 // update user
 exports.UpdateUser = async (req, res) => {
   try {
+    
     //data
     let userId = req.user;
     let paramsId = req.params.id;
     let paramsUser = req.params.username;
     let data = req.body;
+    
     //parametros no permitidos
     let paramsDenied = {
       email: data?.email,
@@ -145,11 +156,14 @@ exports.UpdateUser = async (req, res) => {
     const hasDeniedParams = Object.values(paramsDenied).some(
       (param) => param !== undefined
     );
+    
     //validacion de usuario existente
     let existsUser = await User.findOne({ _id: paramsId });
     if (!existsUser) return res.status(404).send({ message: "not found user" });
+   
     // comprobacion de acceso a perfil
     if (userId.sub == paramsId) {
+
       // validacion de parametros denegados
       if (hasDeniedParams)
         return res
@@ -182,6 +196,7 @@ exports.UpdateUser = async (req, res) => {
 
 exports.registerAdmin = async (req, res) => {
   try {
+
     //obtener data
     let data = req.body;
     let dataAdmin = req.user;
@@ -253,13 +268,16 @@ exports.registerAdmin = async (req, res) => {
 // Funcion para traer Usuarios
 exports.getUsers = async (req, res) => {
   try {
+
     //datos usuario
     let userId = req.user;
+
     //funcion para Encontrar usuarios segun una instruccion
     let functionGetUsers = async (prompt) => {
       let users = await User.find({}).select(prompt);
       return res.send({ message: "USERS", users });
     };
+
     // validacion, que informacion se puede mostrar al usuario
     if (userId.role === "ADMIN") {
       functionGetUsers("-password");
@@ -274,15 +292,18 @@ exports.getUsers = async (req, res) => {
 
 exports.getUser = async (req, res) => {
   try {
+
     //data 
     let data = req.params.id
     let userId = req.user;
+
     //funcion para mostrar el usuario segun una instruccion
     let fuctionShowUser = async(prompt)=>{
       let userData = await User.findOne({_id:data}).select(prompt)
       if(!userData)     return res.status(404).send({ message: `User didn't found` });
       return res.send({userData})
     }
+
     // validacion para mostrar informacion segun el usuario
     if(userId.role == "ADMIN"){
       fuctionShowUser('-password')

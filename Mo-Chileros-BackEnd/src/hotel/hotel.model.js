@@ -4,6 +4,9 @@
 const mongoose = require('mongoose')
 
 const hotelSchema = mongoose.Schema({
+    status: {
+        type: Boolean
+    },
     name: {
         type: String, 
         required: true
@@ -32,7 +35,7 @@ const hotelSchema = mongoose.Schema({
         [{dateStart:{type: Date},
           dataEnd:{type:Date}, 
           status: {type: Boolean} }]  
-    }]
+    }], 
     })
 
 module.exports = mongoose.model('Hotel', hotelSchema)

@@ -7,6 +7,7 @@ const { validateData } = require("../utils/validate");
 exports.test = async (req, res) => {
   res.send({ message: "test hotel is running" });
 };
+
 // creacion del hotel
 exports.createHotel = async (req, res) => {
   try {
@@ -14,21 +15,25 @@ exports.createHotel = async (req, res) => {
     //preguntar si esta funcion puede servir para la seguridad y el control de la aplicacion
     // obtener valores de quien va realizar la operacion
     let dataId = req.params.id;
+
     //datos obligatorios
     let params = {
       name: data.name,
       address: data.address,
       description: data.description,
     };
+
     // validacion de datos
     let validateParams = validateData(params);
     if (validateParams) return res.status(403).send(validateParams);
+
     // verificar si existe un hotel
     let findHotel = await Hotel.findOne({
       or: [{ name: data.name }, { address: data.address }],
     });
     if (findHotel)
       return res.status(409).send({ message: "Hotel already exist" });
+
     //creacion del hotel
     let hotel = new Hotel(data);
     await hotel.save();
@@ -40,12 +45,14 @@ exports.createHotel = async (req, res) => {
       .send({ message: "Error trying save hotel, try later" });
   }
 };
+
 // creacion de habitacion en hotel
 exports.addRoom = async (req, res) => {
   try {
     //data
     let idHotel = req.params.id;
     let data = req.body;
+
     // validacion de parametros
     let params = {
       name: data.name,
@@ -54,6 +61,7 @@ exports.addRoom = async (req, res) => {
     };
     let validateParams = validateData(params);
     if (validateParams) return res.status(403).send(validateParams);
+
     // verificar si existen parametros
     let hotelExists = await Hotel.findOne({ _id: idHotel });
     let roomExists = await Hotel.findOne({ "room.name": data.name });
@@ -79,83 +87,110 @@ exports.addRoom = async (req, res) => {
     return res.status(500).send({ message: "error adding room" });
   }
 };
+
 // obtener hoteles
 exports.getHotels = async (req, res) => {
   try {
+    let data = req.user;
+
     //encontrar hoteles
-    let hotels = await Hotel.find({});
-    if(!hotels) return res.status(404).send({message:"hotels dont found"})
-    return res.send({ hotels });
+    if (data.role == "ADMIN" || data.role == "MODERATOR") {
+      let hotels = await Hotel.find({});
+      if (!hotels)
+        return res.status(404).send({ message: "hotels dont found" });
+      return res.send({ hotels });
+    } else {
+      let hotels = await Hotel.find({ status: true });
+      if (!hotels)
+        return res.status(404).send({ message: "hotels dont found" });
+      return res.send({ hotels });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).send({ message: "error getting hotel" });
   }
 };
+
 //obtener hotel
 exports.getHotel = async (req, res) => {
   try {
     //data
     let data = req.params.id;
+    let user = req.user;
     //buscar datos
-    let hotel = await Hotel.findOne({ _id: data }).select("-_id -status");
-    //validar datos
-    if (!hotel) return res.status(403).send({ message: "hotel doesnt found" });
-    return res.send({ hotel });
+
+    if (user.role !== "ADMIN" || user.role !== "MODERATOR") {
+      let hotel = await Hotel.findOne({ _id: data, status: true }).select(
+        "-_id -status"
+      );
+      //validar datos
+      if (!hotel)
+        return res.status(403).send({ message: "hotel doesnt found" });
+      return res.send({ hotel });
+    } else if (!user.role) {
+      let hotel = await Hotel.findOne({ _id: data });
+      //validar datos
+      if (!hotel)
+        return res.status(403).send({ message: "hotel doesnt found" });
+      return res.send({ hotel });
+    }
   } catch (err) {
     console.log(err);
   }
 };
 
-exports.updateHotel= async(req,res)=>{
-    try {
-        //data
-        let hotelId = req.params.id
-        let data= req.body;
-           //parametros no permitidos
-        let paramsDenied = {
-          status:data.status
-        };
-  
-        const hasDeniedParams = Object.values(paramsDenied).some(
-            (param) => param !== undefined
-        );
-        // encontrar hotel existente
-        let existsHotel = await Hotel.findOne({_id:hotelId});
-        // denegar parametros
-        if (hasDeniedParams)
-        return res
-          .status(422)
-          .send({ message: "Have submitted some data that cannot be updated" });
-        
-        if(!existsHotel) return res.status(404).send({message: 'hotel doesnt found'});
-        //actualizar
-        let updateHotel = await Hotel.findOneAndUpdate(
-            {_id:hotelId},
-            data,
-            {new:true}
-        )
-        if(!updateHotel) return res.status(422).send({message: 'hotel doesnt updated'})
-        return res.send({message: 'hotel updated', updateHotel})
-        
-    } catch (err) {
-        console.log(err)
-        return res.status(500).send({message: 'error updating hotel'})
-    }
-}
+exports.updateHotel = async (req, res) => {
+  try {
+    //data
+    let hotelId = req.params.id;
+    let data = req.body;
+    //parametros no permitidos
+    let paramsDenied = {
+      status: data.status,
+    };
+
+    const hasDeniedParams = Object.values(paramsDenied).some(
+      (param) => param !== undefined
+    );
+    // encontrar hotel existente
+    let existsHotel = await Hotel.findOne({ _id: hotelId });
+    // denegar parametros
+    if (hasDeniedParams)
+      return res
+        .status(422)
+        .send({ message: "Have submitted some data that cannot be updated" });
+
+    if (!existsHotel)
+      return res.status(404).send({ message: "hotel doesnt found" });
+    //actualizar
+    let updateHotel = await Hotel.findOneAndUpdate({ _id: hotelId }, data, {
+      new: true,
+    });
+    if (!updateHotel)
+      return res.status(422).send({ message: "hotel doesnt updated" });
+    return res.send({ message: "hotel updated", updateHotel });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({ message: "error updating hotel" });
+  }
+};
 //desactivar hotel
 exports.desactivateHotel = async (req, res) => {
   try {
     //data
     let hotelId = req.params.id;
-    let hotelexists = await Hotel.findOne({_id: hotelId})
+    let hotelexists = await Hotel.findOne({ _id: hotelId });
     //comprobacion de hotel
-    if(!hotelexists) return res.status(404).send({message:'hotel doesnt found'})
+    if (!hotelexists)
+      return res.status(404).send({ message: "hotel doesnt found" });
     let hotel = await Hotel.findOneAndUpdate(
       { _id: hotelId },
       { status: false },
       { new: true }
     );
-    if (!hotel) return res.status(403).send({ message: "hotel doesnt desactivated" });
+    if (!hotel)
+      return res.status(403).send({ message: "hotel doesnt desactivated" });
+    return res.send({ hotel });
   } catch (err) {
     console.log(err);
     return res.status(500).send({ message: "error desactivate hotel" });
