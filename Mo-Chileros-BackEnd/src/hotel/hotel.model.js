@@ -27,6 +27,7 @@ const hotelSchema = mongoose.Schema({
         required: true
     },
     room:[{
+        status:{type:Boolean},
         name: {type: String},
         capacity: {type: Number},
         price: {type: Number},
@@ -35,7 +36,8 @@ const hotelSchema = mongoose.Schema({
         [{dateStart:{type: Date},
           dataEnd:{type:Date}, 
           status: {type: Boolean} }]  
-    }], 
+        }], 
+        
     })
 
 module.exports = mongoose.model('Hotel', hotelSchema)
