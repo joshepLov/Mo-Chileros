@@ -71,6 +71,8 @@ exports.addRoom = async (req, res) => {
         .send({ message: `hotel didn't find or some data already exists` });
     if (roomExists)
       return res.status(409).send({ message: `room already exists` });
+
+    //añadir habitacion
     let addRoom = await Hotel.findOneAndUpdate(
       { _id: idHotel },
       {
@@ -80,6 +82,7 @@ exports.addRoom = async (req, res) => {
       },
       { new: true }
     );
+    // verificar actualizacion 
     if (!addRoom) return res.status(404).send({ message: "error adding room" });
     return res.send({ message: "room created", addRoom });
   } catch (err) {
@@ -95,6 +98,7 @@ exports.getHotelsMochileros = async (req, res) => {
     //encontrar hoteles
     let hotels = await Hotel.find({status:true}).select('-_id -status');
       if (!hotels) return res.status(404).send({ message: "hotels dont found" });
+    // verificar si hotel viene vacio
       if (hotels.length == 0)  return res.status(404).send({ message: "hotels dont found" });
     return res.send({ message: hotels });
   } catch (err) {
@@ -121,7 +125,7 @@ exports.getHotelMochileros = async (req, res) => {
   }
 };
 
-///////////////////////
+
 // obtener hoteles para moderadores
 exports.getHotelsModerator = async (req, res) => {
   try {
@@ -156,20 +160,27 @@ exports.getHotelModerator = async (req, res) => {
 // obtener habitaciones 
 exports.getRooms = async (req, res) =>{
   try {
+    //fata
     let hotelId = req.params.id 
     
+    //encontrar hotel 
     let hotel = await Hotel.findOne({ _id: hotelId, status: true});
     if (!hotel)
     return res.status(403).send({ message: "hotel doesnt found" });
+    //encontrar habitacion
     let hotels = await Hotel.find({ 'room.status': true})
    
+    // encontrar habitaciones y guardarlas para mostrarlas
     let foundRooms = [];
-
     hotels.forEach((hotel) => {
       const rooms = hotel.room.filter((room) => room.status === true);
       foundRooms.push(...rooms);
     });
+
+    // verificar que si haya habitaciones
     if(foundRooms.length == 0)return res.status(404).send({message: 'rooms dont found'})
+    
+    //mostrar
     return res.send({message: foundRooms})
   } catch (err) {
     console.log(err)
@@ -179,16 +190,44 @@ exports.getRooms = async (req, res) =>{
 
 exports.getRoom = async(req,res)=>{
   try {
+    //data
     let hotelId = req.params.id
     let roomId = req.params.roomId
-    console.log(hotelId, roomId)
+    
     //habitacion existente
     let existHotel = await Hotel.findOne({_id: hotelId, status:true})
     if(!existHotel)  return res.status(404).send({message: 'hotel doesnt found'})
     let existsRoom = await Hotel.findOne({'room._id':roomId})
     if(!existsRoom) return res.status(404).send({message: 'room doesnt found'})
     
+    //encontrar habitacion
     let findRoom = await Hotel.findOne({'room._id': roomId, 'room.status': true}, {'room.$': 1})
+
+    //verificar habitacion
+    if(!findRoom)  return res.status(404).send({message: 'room doesnt found'})
+
+    //mostrar habitacion
+    return res.send({message: findRoom})
+  } catch (err) {
+    console.log(err)
+    return res.status(500).send({message: 'room doesnt found'})
+  }
+}
+
+exports.getRoomModerator = async(req,res)=>{
+  try {
+    //data
+    let hotelId = req.params.id
+    let roomId = req.params.roomId
+
+    //habitacion existente
+    let existHotel = await Hotel.findOne({_id: hotelId})
+    if(!existHotel)  return res.status(404).send({message: 'hotel doesnt found'})
+    let existsRoom = await Hotel.findOne({'room._id':roomId})
+    if(!existsRoom) return res.status(404).send({message: 'room doesnt found'})
+    
+    //encontrar habitacion
+    let findRoom = await Hotel.findOne({'room._id': roomId}, {'room.$': 1})
     if(!findRoom)  return res.status(404).send({message: 'room doesnt found'})
     return res.send({message: findRoom})
   } catch (err) {
@@ -201,13 +240,16 @@ exports.getRoom = async(req,res)=>{
 // obtener habitaciones Moderator
 exports.getRoomsModerator = async (req, res) =>{
   try {
+    //data
     let hotelId = req.params.id 
     
+    //encontrar hotel
     let hotel = await Hotel.find({ _id: hotelId});
     if (!hotel)
     return res.status(403).send({ message: "hotel doesnt found" });
     let rooms = await Hotel.find({ 'room.status':true})
 
+    //verificar que existan habitacinoes
     if(rooms.length == 0)return res.status(404).send({message: 'rooms dont found'})
     return res.send({message: rooms})
   } catch (err) {
@@ -227,14 +269,16 @@ exports.updateHotel = async (req, res) => {
     let paramsDenied = {
       status: data.status,
     };
-
     const hasDeniedParams = Object.values(paramsDenied).some(
       (param) => param !== undefined
     );
 
     // encontrar hotel existente
     let existsHotel = await Hotel.findOne({ _id: hotelId });
-       // verificar si existe un hotel con los parametros enviados
+    let nameExists = await Hotel.findOne({name: data.name})
+    if(nameExists) return res.status(409).send({message: 'hotel already exists'})
+  
+    // verificar si existe un hotel con los parametros enviados
        let findHotel = await Hotel.findOne({
         or: [{ name: data.name }, { address: data.address }],
       });
@@ -255,8 +299,11 @@ exports.updateHotel = async (req, res) => {
       { _id: hotelId },
       data,
       { new: true });
+    
+    //verificar actualizacion
     if (!updateHotel)
       return res.status(422).send({ message: "hotel doesnt updated" });
+    //mostrar actualizacoin 
     return res.send({ message: "hotel updated", updateHotel });
   } catch (err) {
     console.log(err);
@@ -285,8 +332,11 @@ try {
   let hotelexists = await Hotel.findOne({_id: hotelId})
   if (!hotelexists) return res.status(404).send({message: 'hotel doesnt found'})
   let existsRoom = await Hotel.findOne({'room._id':roomId})
+  let nameExists = await Hotel.findOne({'room.name': data.name})
+  if(nameExists) return res.status(409).send({message: 'room already exists'})
   if(!existsRoom) return res.status(404).send({message: 'room doesnt found'})
-
+ 
+ 
   //actualizar habitacion
   let updatedRoom = await Hotel.findOneAndUpdate(
     { 'room._id': roomId },
@@ -325,8 +375,11 @@ exports.desactivateHotel = async (req, res) => {
       { status: false },
       { new: true }
     );
+
+    //verificar desactivacion
     if (!hotel)
       return res.status(403).send({ message: "hotel doesnt desactivated" });
+    //mostrar desactivacion
     return res.send({hotel})
   } catch (err) {
     console.log(err);
@@ -337,9 +390,10 @@ exports.desactivateHotel = async (req, res) => {
 // desactivar room 
 exports.desactivateRoom = async(req, res) =>{
   try {
+
+  //data
     let hotelId = req.params.id
     let roomId = req.params.roomId
-    console.log(hotelId, roomId);
     
   //habitacion existente
   let existHotel = await Hotel.findOne({_id: hotelId})
@@ -347,7 +401,7 @@ exports.desactivateRoom = async(req, res) =>{
   let existsRoom = await Hotel.findOne({'room._id':roomId})
   if(!existsRoom) return res.status(404).send({message: 'room doesnt found'})
 
-  //actualizar habitacion
+  //desactivar habitacion
   let desactivate = await Hotel.findOneAndUpdate(
     { 'room._id': roomId },
     {
@@ -358,8 +412,10 @@ exports.desactivateRoom = async(req, res) =>{
     { new: true }
   );
 
+  //encontrar habitacion
   const findRoom = desactivate.room.find(room => room._id.toString() === roomId.toString())
 
+  //mostrar
   return res.send({message: findRoom})
 
   } catch (err) {
@@ -370,7 +426,7 @@ exports.desactivateRoom = async(req, res) =>{
 
 
 //activar 
-//desactivar hotel
+// hotel
 exports.activateHotel = async (req, res) => {
   try {
     //data
@@ -385,8 +441,11 @@ exports.activateHotel = async (req, res) => {
       { status: true },
       { new: true }
     );
+    
+    //verificar desactualizacion
     if (!hotel)
       return res.status(403).send({ message: "hotel doesnt desactivated" });
+  //mostrar
     return res.send({hotel})
   } catch (err) {
     console.log(err);
@@ -397,6 +456,8 @@ exports.activateHotel = async (req, res) => {
 // desactivar room 
 exports.activateRoom = async(req, res) =>{
   try {
+
+  //data
     let hotelId = req.params.id
     let roomId = req.params.roomId
     console.log(hotelId, roomId);
@@ -406,7 +467,7 @@ exports.activateRoom = async(req, res) =>{
   if(!existHotel)  return res.status(404).send({message: 'hotel doesnt found'})
   let existsRoom = await Hotel.findOne({'room._id':roomId})
   if(!existsRoom) return res.status(404).send({message: 'room doesnt found'})
-
+  
   //actualizar habitacion
   let desactivate = await Hotel.findOneAndUpdate(
     { 'room._id': roomId },
@@ -418,8 +479,10 @@ exports.activateRoom = async(req, res) =>{
     { new: true }
   );
 
+  //encontrar habitacion
   const findRoom = desactivate.room.find(room => room._id.toString() === roomId.toString())
 
+  //mostrar habitacion
   return res.send({message: findRoom})
 
   } catch (err) {
