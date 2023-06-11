@@ -11,6 +11,7 @@ const port = process.env.PORT
 
 const userRoutes = require('../src/User/user.routes')
 const hotelRoutes = require('../src/hotel/hotel.routes')
+const transportRoutes = require('../src/transport/transport.routes')
 
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
@@ -20,6 +21,7 @@ app.use(morgan('dev'));
 
 app.use('/user', userRoutes)
 app.use('/hotel', hotelRoutes)
+app.use('/transport', transportRoutes)
 
 exports.initServer = ()=>{
     app.listen(port);
