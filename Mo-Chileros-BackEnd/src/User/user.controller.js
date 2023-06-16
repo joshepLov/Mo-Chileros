@@ -1,6 +1,8 @@
 "use strict";
 
 const User = require("./user.model");
+const fs = require('fs')
+const path = require('path')
 
 const {
   validateData,
@@ -315,3 +317,62 @@ exports.getUser = async (req, res) => {
     return res.status(400).send({ message: "error getting your user" });
   }
 };
+
+
+exports.addImage = async(req, res)=>{
+  try{
+      const userId = req.params.id; 
+      const alreadyImage = await User.findOne({_id: userId})
+   
+      console.log(alreadyImage);
+      let pathFile = './uploads/User/'
+   
+      console.log(req.files.image);
+      if(alreadyImage.image) fs.unlinkSync(`${pathFile}${alreadyImage.image}`) 
+      console.log(alreadyImage.image)
+      if(!req.files.image || !req.files.image.type) return res.status(400).send({message: 'Havent sent image'})
+      
+      const filePath = req.files.image.path; 
+      const fileSplit = filePath.split('\\') 
+      const fileName = fileSplit[2];
+      const extension = fileName.split('\.');
+      const fileExt = extension[1] 
+      console.log(fileExt)
+
+      if(
+          fileExt == 'png' || 
+          fileExt == 'jpg' || 
+          fileExt == 'jpeg' || 
+          fileExt == 'gif'
+      ){
+          const updateUserImage = await User.findOneAndUpdate(
+              {_id: userId}, 
+              {image: fileName}, 
+              {new: true}
+          )
+          if(!updateUserImage) return res.status(404).send({message: 'user not found and not updated'});
+          return res.send({message: 'User updated', updateUserImage})
+      }
+      fs.unlinkSync(filePath)
+      return res.status(404).send({message: 'File extension cannot admited'});
+      
+
+  }catch(err){
+      console.error(err);
+      return res.status(500).send({message: 'Error adding image', err})
+  }
+}
+
+exports.getImage = async(req, res)=>{
+  try{
+      const fileName = req.params.fileName;
+      const pathFile = `./uploads/User/${fileName}`
+
+      const image = fs.existsSync(pathFile);
+      if(!image) return res.status(404).send({message: 'image not found'})
+      return res.sendFile(path.resolve(pathFile))
+  }catch(err){
+      console.error(err);
+      return res.status(500).send({message: 'Error getting image'});
+  }
+}
