@@ -5,6 +5,10 @@ const api = express.Router();
 
 const hotelController= require('./hotel.controller')
 const {ensureAuth, isAdmin, isModerator}= require('../services/authenticated')
+//image
+const connectMultiparty = require('connect-multiparty')
+const upload = connectMultiparty({uploadDir: './uploads/Hotel'})
+const uploadRoom = connectMultiparty({uploadDir: './uploads/Rooms'})
 
 //rutas privadas
 api.get('/test',[ensureAuth, isModerator], hotelController.test);
@@ -35,4 +39,14 @@ api.get('/getHotels',hotelController.getHotelsMochileros)
 api.get('/getHotel/:id', hotelController.getHotelMochileros);
 api.get('/getRooms/:id', hotelController.getRooms)
 api.get('/getRoom/:id/:roomId', hotelController.getRoom)
+
+// ===========================imagenes==============================================
+api.put('/uploadImage/:id',upload, hotelController.addImage);
+api.get('/getImage/:fileName',upload, hotelController.getImage);
+// ===========================habitaciones
+// ===========================imagenes==============================================
+api.put('/uploadImageRoom/:id',uploadRoom, hotelController.addImageRoom);
+api.get('/getImageRoom/:fileName',uploadRoom, hotelController.getImage);
+
+
 module.exports = api

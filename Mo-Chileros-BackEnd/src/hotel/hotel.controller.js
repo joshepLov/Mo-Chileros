@@ -3,6 +3,8 @@
 const Hotel = require("./hotel.model");
 
 const { validateData } = require("../utils/validate");
+const fs = require('fs')
+const path = require('path')
 
 exports.test = async (req, res) => {
   res.send({ message: "test hotel is running" });
@@ -488,5 +490,127 @@ exports.activateRoom = async(req, res) =>{
   } catch (err) {
     console.log(err)
     return res.status(500).send({message: 'problem desactivate room'})
+  }
+}
+
+//agregar imagen a hotel 
+
+exports.addImage = async(req, res)=>{
+  try{
+      const hotelId = req.params.id; 
+      const alreadyImage = await Hotel.findOne({_id: hotelId})
+   
+      console.log(alreadyImage);
+      let pathFile = './uploads/Hotel/'
+   
+      console.log(req.files.image);
+      if(alreadyImage.image) fs.unlinkSync(`${pathFile}${alreadyImage.image}`) 
+      console.log(alreadyImage.image)
+      if(!req.files.image || !req.files.image.type) return res.status(400).send({message: 'Havent sent image'})
+      
+      const filePath = req.files.image.path; 
+      const fileSplit = filePath.split('\\') 
+      const fileName = fileSplit[2];
+      const extension = fileName.split('\.');
+      const fileExt = extension[1] 
+      console.log(fileExt)
+
+      if(
+          fileExt == 'png' || 
+          fileExt == 'jpg' || 
+          fileExt == 'jpeg' || 
+          fileExt == 'gif'
+      ){
+          const updateHotelImage = await Hotel.findOneAndUpdate(
+              {_id: hotelId}, 
+              {image: fileName}, 
+              {new: true}
+          )
+          if(!updateHotelImage) return res.status(404).send({message: 'hotel not found and not updated'});
+          return res.send({message: 'hotel updated', updateHotelImage})
+      }
+      fs.unlinkSync(filePath)
+      return res.status(404).send({message: 'File extension cannot admited'});
+      
+
+  }catch(err){
+      console.error(err);
+      return res.status(500).send({message: 'Error adding image', err})
+  }
+}
+
+//obtener imagen 
+exports.getImage = async(req, res)=>{
+  try{
+      const fileName = req.params.fileName;
+      const pathFile = `./uploads/Hotel/${fileName}`
+
+      const image = fs.existsSync(pathFile);
+      if(!image) return res.status(404).send({message: 'image not found'})
+      return res.sendFile(path.resolve(pathFile))
+  }catch(err){
+      console.error(err);
+      return res.status(500).send({message: 'Error getting image'});
+  }
+}
+
+//image habitacion 
+
+exports.addImageRoom = async(req, res)=>{
+  try{
+      const roomlId = req.params.id; 
+      const alreadyImage = await Hotel.findOne({'room._id': roomlId})
+   
+      console.log(alreadyImage);
+      let pathFile = './uploads/Rooms/'
+   
+      console.log(req.files.image);
+      if(alreadyImage.image) fs.unlinkSync(`${pathFile}${alreadyImage.image}`) 
+      console.log(alreadyImage.image)
+      if(!req.files.image || !req.files.image.type) return res.status(400).send({message: 'Havent sent image'})
+      
+      const filePath = req.files.image.path; 
+      const fileSplit = filePath.split('\\') 
+      const fileName = fileSplit[2];
+      const extension = fileName.split('\.');
+      const fileExt = extension[1] 
+      console.log(fileExt)
+
+      if(
+          fileExt == 'png' || 
+          fileExt == 'jpg' || 
+          fileExt == 'jpeg' || 
+          fileExt == 'gif'
+      ){
+          const updatedRoomImage = await Hotel.findOneAndUpdate(
+              {'room._id': roomlId}, 
+              {'room.$.image':fileName}, 
+              {new: true}
+          )
+          if(!updatedRoomImage) return res.status(404).send({message: 'room not found and not updated'});
+          return res.send({message: 'room updated', updatedRoomImage})
+      }
+      fs.unlinkSync(filePath)
+      return res.status(404).send({message: 'File extension cannot admited'});
+      
+
+  }catch(err){
+      console.error(err);
+      return res.status(500).send({message: 'Error adding image', err})
+  }
+}
+
+//obtener imagen habitacion
+exports.getImage = async(req, res)=>{
+  try{
+      const fileName = req.params.fileName;
+      const pathFile = `./uploads/Rooms/${fileName}`
+
+      const image = fs.existsSync(pathFile);
+      if(!image) return res.status(404).send({message: 'image not found'})
+      return res.sendFile(path.resolve(pathFile))
+  }catch(err){
+      console.error(err);
+      return res.status(500).send({message: 'Error getting image'});
   }
 }
