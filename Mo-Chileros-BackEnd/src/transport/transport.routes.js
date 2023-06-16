@@ -5,6 +5,9 @@ const api = express.Router();
 
 const transportController = require('./transport.controller')
 const {ensureAuth, isModerator, isMochilero} = require('../services/authenticated')
+//image
+const connectMultiparty = require('connect-multiparty')
+const upload = connectMultiparty({uploadDir: './uploads/Transport'})
 
 // RUTAS PRIVADAS 
 api.get('/test', [ensureAuth,isModerator],transportController.test);
@@ -25,4 +28,8 @@ api.put('/activateTransport/:id',[ensureAuth,isModerator], transportController.a
 api.get('/getTransports',[ensureAuth,isMochilero],transportController.getTransportsMochileros)
 api.get('/getTransport/:id',[ensureAuth, isMochilero] ,transportController.getTransportMochileros)
 
+
+//image
+api.put('/uploadImage/:id',upload, transportController.addImage);
+api.get('/getImage/:fileName',upload, transportController.getImage);
 module.exports = api

@@ -30,6 +30,9 @@ const transportSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    image:{
+        type:String
+    },
     states:[{
         state :{type: mongoose.Schema.Types.ObjectId},
         name:{type: String}
