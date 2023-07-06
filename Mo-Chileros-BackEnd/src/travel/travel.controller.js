@@ -1,7 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose')
-
+//hola mundo 
 const travelSchema = mongoose.Schema({
     status:{
         type: Number
