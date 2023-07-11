@@ -66,7 +66,7 @@ exports.addRoom = async (req, res) => {
 
     // verificar si existen parametros
     let hotelExists = await Hotel.findOne({ _id: idHotel });
-    let roomExists = await Hotel.findOne({ "room.name": data.name });
+    let roomExists = await Hotel.findOne({ _id: idHotel,"room.name": data.name });
     if (!hotelExists)
       return res
         .status(404)

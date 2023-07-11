@@ -22,7 +22,7 @@ exports.test = async (req, res) => {
 
 
 //usuarioAdmin
-exports.userDefault = async () => {
+exports.userDefault = async (req,res) => {
   try {
     let data = {
       name: "admin",
