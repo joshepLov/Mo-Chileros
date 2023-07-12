@@ -32,10 +32,7 @@ const hotelSchema = mongoose.Schema({
         capacity: {type: Number},
         price: {type: Number},
         image: {type: String},
-        dates:
-        [{dateStart:{type: Date},
-          dataEnd:{type:Date}, 
-          status: {type: Boolean} }]  
+        
         }], 
         
     })

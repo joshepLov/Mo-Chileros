@@ -13,6 +13,7 @@ const userRoutes = require('../src/User/user.routes')
 const hotelRoutes = require('../src/hotel/hotel.routes')
 const transportRoutes = require('../src/transport/transport.routes')
 const routeRoutes = require('../src/routesTravel/routes.routes')
+const travelRoutes = require('../src/travel/travel.routes')
 
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
@@ -24,6 +25,7 @@ app.use('/user', userRoutes)
 app.use('/hotel', hotelRoutes)
 app.use('/transport', transportRoutes)
 app.use('/route', routeRoutes)
+app.use('/travel', travelRoutes)
 
 exports.initServer = ()=>{
     app.listen(port);

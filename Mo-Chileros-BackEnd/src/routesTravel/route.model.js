@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 //hola mundo 
 const RouteSchema = mongoose.Schema({
     status:{
-        type:Boolean
+        type: Number
     },
     routeDuration: {
         type: Number
