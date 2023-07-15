@@ -20,4 +20,4 @@ const reservationTransportSchema= mongoose.Schema({
 
 }) 
 
-modeule.exports = mongoose.model('reservationTrasnport', reservationTransportSchema);
+modeule.exports = mongoose.model('reservationTransport', reservationTransportSchema);

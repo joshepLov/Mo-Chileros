@@ -1,14 +1,21 @@
 'use strict'
 
 const mongoose = require('mongoose')
-//hola mundo 
+
 const travelSchema = mongoose.Schema({
     route:{
         type : mongoose.Schema.Types.ObjectId, 
             ref: 'Route'
     },
-    Place:{
+    place:{
         type: String
+    },
+    capacity:{
+        type:Number
+    },
+    cordinator: {
+        type: mongoose.Schema.Types.ObjectId, 
+            ref: 'User'
     },
     members:[{
         user:{
@@ -36,30 +43,31 @@ const travelSchema = mongoose.Schema({
             type: Number
         }
     }], 
-
-    Dates:[{
-        DateStart:{
-            type: Date
-        },
-        DateEnd:{
-            type:Date
-        }
-    }] , 
-    Price:{
+    dateStart:{
+        type: Date
+    },
+    dateEnd:{
+        type: Date
+    }, 
+    price:{
         type: Number
     },
-    Reservations:[{
+    reservations:[{
         hotel:{
             type: mongoose.Schema.Types.ObjectId,
                 ref:'ReservationHotel'
         }, 
         transport:{
             type: mongoose.Schema.Types.ObjectId, 
-                ref:'ReservationTrasnport'
+                ref:'ReservationTransport'
         }
     }],
-
-
+    status:{
+        type: Boolean
+    },
+    travelStatus:{
+        type: Number
+    }
 
 }) 
 

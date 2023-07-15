@@ -26,7 +26,7 @@ exports.createRoute = async(req,res)=>{
         }
         // datos obligatorios en la creacion 
         data.creator = user.sub
-        data.status = false
+
         //validar parametros
         let validaParams = validateData(params);
         if (validaParams) return res.status(403).send(validaParams)
