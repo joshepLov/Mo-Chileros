@@ -20,7 +20,7 @@ api.put('/addRoom/:id', [ensureAuth, isModerator], hotelController.addRoom)
 api.get('/getHotelsModerator',[ensureAuth,isModerator], hotelController.getHotelsModerator)
 api.get('/getHotelModerator/:id', [ensureAuth, isModerator], hotelController.getHotelModerator)
 api.get('/getRoomsModerator/:id', [ensureAuth, isModerator], hotelController.getRoomsModerator)
-api.get('/getRoomModerator/id/:roomdId',[ensureAuth, isModerator], hotelController.getRoomModerator)
+api.get('/getRoomModerator/:id/:roomdId',[ensureAuth, isModerator], hotelController.getRoomModerator)
 
 //======================update=========================
 api.put('/UpdateHotel/:id',[ensureAuth, isModerator], hotelController.updateHotel)

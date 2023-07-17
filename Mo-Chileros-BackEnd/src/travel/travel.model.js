@@ -10,6 +10,9 @@ const travelSchema = mongoose.Schema({
     place:{
         type: String
     },
+    state:{
+        type: String
+    },
     capacity:{
         type:Number
     },
@@ -26,7 +29,7 @@ const travelSchema = mongoose.Schema({
             type: String
         }
     }], 
-    Activities:[{
+    activities:[{
         name:{
             type: String
         }, 
