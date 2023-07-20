@@ -48,14 +48,14 @@ exports.userDefault = async (req,res) => {
     }
   } catch (err) {
     console.error(err);
-    return res.status(500).send({ message: "error server" });
+    // return res.status(500).send({ message: "error server" });
   }
 };
 
 // funcion para que se registre el mochilero(cliente)
 exports.register = async (req, res) => {
   try {
-    
+
     //obtener data
     let data = req.body;
     console.log();
@@ -69,11 +69,11 @@ exports.register = async (req, res) => {
       phone: data.phone,
       age: data.age,
     };
-   
+
     //validar parametros obligatorios
     let validate = validateData(params);
     if (validate) return res.status(409).send(validate);
-   
+
     //validar si no hay usuario con estas credenciales
     let dataValidate = await User.findOne({
       $or: [
@@ -104,14 +104,14 @@ exports.register = async (req, res) => {
 // log in
 exports.login = async (req, res) => {
   try {
-   
+
     //data
     let data = req.body;
     let credentials = {
       username: data.username,
       password: data.password,
     };
-    
+
     // validar que vengan los datos
     let validateCredentials = validateData(credentials);
     if (validateCredentials)
@@ -139,13 +139,13 @@ exports.login = async (req, res) => {
 // update user
 exports.UpdateUser = async (req, res) => {
   try {
-    
+
     //data
     let userId = req.user;
     let paramsId = req.params.id;
     let paramsUser = req.params.username;
     let data = req.body;
-    
+
     //parametros no permitidos
     let paramsDenied = {
       email: data?.email,
@@ -158,11 +158,11 @@ exports.UpdateUser = async (req, res) => {
     const hasDeniedParams = Object.values(paramsDenied).some(
       (param) => param !== undefined
     );
-    
+
     //validacion de usuario existente
     let existsUser = await User.findOne({ _id: paramsId });
     if (!existsUser) return res.status(404).send({ message: "not found user" });
-   
+
     // comprobacion de acceso a perfil
     if (userId.sub == paramsId) {
 
@@ -295,7 +295,7 @@ exports.getUsers = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
 
-    //data 
+    //data
     let data = req.params.id
     let userId = req.user;
 
@@ -321,33 +321,33 @@ exports.getUser = async (req, res) => {
 
 exports.addImage = async(req, res)=>{
   try{
-      const userId = req.params.id; 
+      const userId = req.params.id;
       const alreadyImage = await User.findOne({_id: userId})
-   
+
       console.log(alreadyImage);
       let pathFile = './uploads/User/'
-   
+
       console.log(req.files.image);
-      if(alreadyImage.image) fs.unlinkSync(`${pathFile}${alreadyImage.image}`) 
+      if(alreadyImage.image) fs.unlinkSync(`${pathFile}${alreadyImage.image}`)
       console.log(alreadyImage.image)
       if(!req.files.image || !req.files.image.type) return res.status(400).send({message: 'Havent sent image'})
-      
-      const filePath = req.files.image.path; 
-      const fileSplit = filePath.split('\\') 
+
+      const filePath = req.files.image.path;
+      const fileSplit = filePath.split('\\')
       const fileName = fileSplit[2];
       const extension = fileName.split('\.');
-      const fileExt = extension[1] 
+      const fileExt = extension[1]
       console.log(fileExt)
 
       if(
-          fileExt == 'png' || 
-          fileExt == 'jpg' || 
-          fileExt == 'jpeg' || 
+          fileExt == 'png' ||
+          fileExt == 'jpg' ||
+          fileExt == 'jpeg' ||
           fileExt == 'gif'
       ){
           const updateUserImage = await User.findOneAndUpdate(
-              {_id: userId}, 
-              {image: fileName}, 
+              {_id: userId},
+              {image: fileName},
               {new: true}
           )
           if(!updateUserImage) return res.status(404).send({message: 'user not found and not updated'});
@@ -355,7 +355,7 @@ exports.addImage = async(req, res)=>{
       }
       fs.unlinkSync(filePath)
       return res.status(404).send({message: 'File extension cannot admited'});
-      
+
 
   }catch(err){
       console.error(err);
