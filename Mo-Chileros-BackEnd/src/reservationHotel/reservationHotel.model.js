@@ -15,13 +15,19 @@ const reservationHotelSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
         ref: 'Hotel.room'
   }, 
-  date:{
-    type: Date
+  user:{
+    type: mongoose.Schema.Types.ObjectId, 
+      ref: 'User'
   },
+  dates:[{
+
+    date: {type: Date}
+  },
+],
   price:{
     type: Number
   }
 
 }) 
 
-modeule.exports = mongoose.model('ReservationHotel', reservationHotelSchema);
+module.exports = mongoose.model('ReservationHotel', reservationHotelSchema);

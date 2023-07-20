@@ -98,7 +98,7 @@ exports.getHotelsMochileros = async (req, res) => {
   try {
    
     //encontrar hoteles
-    let hotels = await Hotel.find({status:true}).select('-_id -status');
+    let hotels = await Hotel.find({status:true}).select(' -status');
       if (!hotels) return res.status(404).send({ message: "hotels dont found" });
     // verificar si hotel viene vacio
       if (hotels.length == 0)  return res.status(404).send({ message: "hotels dont found" });
