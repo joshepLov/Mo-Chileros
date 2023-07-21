@@ -3,6 +3,7 @@
 const mongoose = require('mongoose')
 
 const transportSchema = mongoose.Schema({
+<<<<<<< HEAD
     type:{
         type: String,
         required: true,
@@ -13,10 +14,33 @@ const transportSchema = mongoose.Schema({
         required: true 
     },
     price: {
+=======
+    status: {
+        type: Boolean,
+    },
+    name:{
+        type:String,
+        required:true
+    },
+    type: {
+        type: String, 
+        required: true
+    },
+    typeVehicle:{
+        type:String,
+        required: true
+    },
+    description:{
+        type: String,
+        required: true
+    },
+    price:{
+>>>>>>> origin/mhurtado
         type: Number,
         required: true
     },
     capacity: {
+<<<<<<< HEAD
         type: Number, 
         required: true
     },
@@ -37,3 +61,20 @@ const transportSchema = mongoose.Schema({
 })
 
 module.exports  = mongoose.model('Transport', transportSchema)
+=======
+        type: Number,
+        required: true
+    },
+    image:{
+        type:String
+    },
+    states:[{
+        state :{type: mongoose.Schema.Types.ObjectId},
+        name:{type: String}
+        }], 
+        
+    })
+
+module.exports = mongoose.model('Transport', transportSchema)
+
+>>>>>>> origin/mhurtado

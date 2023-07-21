@@ -2,7 +2,11 @@
 
 const bcrypt = require('bcrypt');
 
+<<<<<<< HEAD
 
+=======
+// funcion para validar que cada parametro venga y si no avisarle que hacen falta datos
+>>>>>>> origin/mhurtado
 exports.validateData = (data)=>{
     let keys = Object.keys(data), msg = '';
     for(let key of keys){
@@ -13,6 +17,7 @@ exports.validateData = (data)=>{
     }
     return msg.trim();
 }
+<<<<<<< HEAD
 
 exports.encrypt = async(password)=>{
     try{
@@ -31,3 +36,26 @@ exports.checkPassword = async(password, hash)=>{
         return false;
     }
 }
+=======
+  
+
+// funcion para encriptar password
+exports.encrypt = async (password) => {
+    try {
+        return await bcrypt.hash(password, 12);
+    } catch (err) {
+        console.log(err)
+        return err;
+    }
+}
+// validacion de contraseña
+exports.checkPassword = async (password,hash) =>{
+    try {
+        return await bcrypt.compare(password, hash)
+    } catch (err) {
+        console.log(err)
+        return false;
+    }
+}
+ 
+>>>>>>> origin/mhurtado
