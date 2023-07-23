@@ -1,0 +1,349 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "MOCHILEROS",
+    "dateExported": "2023-06-08T09:26:08.732Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "fcd04d7e-156e-499e-92f5-12049ab983a8",
+            "name": "USERS",
+            "containerId": "",
+            "created": "2023-06-03T19:07:29.781Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "6dc49ad3-0234-419c-bedc-c0ba2328de1a",
+            "name": "HOTEL",
+            "containerId": "",
+            "created": "2023-06-08T07:51:29.505Z",
+            "sortNum": 20000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "78e9275f-d211-4df0-84e8-46d94e9b871b",
+            "colId": "fb3cbf45-8061-4ea4-9cbf-b04dd6327316",
+            "containerId": "fcd04d7e-156e-499e-92f5-12049ab983a8",
+            "name": "TEST",
+            "url": "user/test",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-06-03T19:08:19.599Z",
+            "modified": "2023-06-04T18:40:33.812Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDdjYzMxNzcyZjY5ZDQ2YzZhZDYxMDMiLCJuYW1lIjoiYWRtaW4iLCJsYXN0bmFtZSI6IjQxOCIsImVtYWlsIjoiZW1haWwiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2ODU5MDM5ODksImV4cCI6MTY4NTkyMTk4OX0.rcS31Z5khvKQUf3i8RcoxtDu-tnS-gOMbQcfTP3UdZ8"
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "12a24eed-aff9-4696-a8be-4e88cef6af17",
+            "colId": "fb3cbf45-8061-4ea4-9cbf-b04dd6327316",
+            "containerId": "fcd04d7e-156e-499e-92f5-12049ab983a8",
+            "name": "register",
+            "url": "user/register",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-06-03T19:59:17.453Z",
+            "modified": "2023-06-04T20:18:07.584Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "name",
+                        "value": "juan"
+                    },
+                    {
+                        "name": "dpi",
+                        "value": "147258963121"
+                    },
+                    {
+                        "name": "email",
+                        "value": "email@lkdafasf"
+                    },
+                    {
+                        "name": "age",
+                        "value": "18"
+                    },
+                    {
+                        "name": "lastname",
+                        "value": "mochilero"
+                    },
+                    {
+                        "name": "phone",
+                        "value": "123456789"
+                    },
+                    {
+                        "name": "password",
+                        "value": "123"
+                    },
+                    {
+                        "name": "username",
+                        "value": "mochilero2"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "e5d5b544-1e7e-49fa-b9e0-c735fb1e2d60",
+            "colId": "fb3cbf45-8061-4ea4-9cbf-b04dd6327316",
+            "containerId": "fcd04d7e-156e-499e-92f5-12049ab983a8",
+            "name": "login",
+            "url": "user/login",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-06-04T16:53:08.870Z",
+            "modified": "2023-06-08T08:19:52.839Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "username",
+                        "value": "ADMIN"
+                    },
+                    {
+                        "name": "password",
+                        "value": "admin"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "5d627bc1-b47f-4d30-9454-4d27bce6d097",
+            "colId": "fb3cbf45-8061-4ea4-9cbf-b04dd6327316",
+            "containerId": "fcd04d7e-156e-499e-92f5-12049ab983a8",
+            "name": "updateUser",
+            "url": "user/updateMochilero/647cc32872f69d46c6ad6108/mochilero1",
+            "method": "PUT",
+            "sortNum": 40000,
+            "created": "2023-06-04T19:27:44.054Z",
+            "modified": "2023-06-04T19:58:16.512Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDdjYzMyODcyZjY5ZDQ2YzZhZDYxMDgiLCJuYW1lIjoianVhbiIsImxhc3RuYW1lIjoibW9jaGlsZXJvIiwiZW1haWwiOiJlbWFpbEBsa2RhZmFzZiIsInJvbGUiOiJNT0NISUxFUk8iLCJpYXQiOjE2ODU5MDY4NzcsImV4cCI6MTY4NTkyNDg3N30.zHOUU6-PIOcYUxGLT2pSw8G03jhpoEUwVci94TOn_WE"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "name",
+                        "value": "jorgito"
+                    },
+                    {
+                        "name": "email",
+                        "value": "",
+                        "isDisabled": true
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "0b3ccdb1-4f29-43c8-ab84-1dc4e2fc821b",
+            "colId": "fb3cbf45-8061-4ea4-9cbf-b04dd6327316",
+            "containerId": "fcd04d7e-156e-499e-92f5-12049ab983a8",
+            "name": "REGISTERadmin",
+            "url": "user/registerAdmin",
+            "method": "POST",
+            "sortNum": 50000,
+            "created": "2023-06-04T21:58:03.784Z",
+            "modified": "2023-06-05T01:23:30.949Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDdjYzMxNzcyZjY5ZDQ2YzZhZDYxMDMiLCJuYW1lIjoiYWRtaW4iLCJsYXN0bmFtZSI6IjQxOCIsImVtYWlsIjoiZW1haWwiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2ODU5MjgxMTcsImV4cCI6MTY4NTk0NjExN30.W_H2DyyEJ5P_Rs0kduKavCM8Wdu0lPaknDtbaQ_6Y_Q\""
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "name",
+                        "value": "juanito"
+                    },
+                    {
+                        "name": "lastname",
+                        "value": "perez"
+                    },
+                    {
+                        "name": "username",
+                        "value": "d"
+                    },
+                    {
+                        "name": "email",
+                        "value": "d"
+                    },
+                    {
+                        "name": "dpi",
+                        "value": "5555555"
+                    },
+                    {
+                        "name": "age",
+                        "value": "18"
+                    },
+                    {
+                        "name": "phone",
+                        "value": "213123123"
+                    },
+                    {
+                        "name": "password",
+                        "value": "123"
+                    },
+                    {
+                        "name": "role",
+                        "value": "MODERADOR"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "d71119b8-0c44-4eb9-ba51-0cf1c80db42a",
+            "colId": "fb3cbf45-8061-4ea4-9cbf-b04dd6327316",
+            "containerId": "fcd04d7e-156e-499e-92f5-12049ab983a8",
+            "name": "GetUserS",
+            "url": "user/getUsers",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2023-06-08T02:55:39.679Z",
+            "modified": "2023-06-08T03:32:54.303Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDdjYzMxNzcyZjY5ZDQ2YzZhZDYxMDMiLCJuYW1lIjoiYWRtaW4iLCJsYXN0bmFtZSI6IjQxOCIsImVtYWlsIjoiZW1haWwiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2ODYxOTUxNTksImV4cCI6MTY4NjIxMzE1OX0.8JLiipNV1JGgyqMxtRf5zRPMQw49ZCD42mkprJ9y35Y\""
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "8b2ff676-3654-470f-b341-76a8125e67c0",
+            "colId": "fb3cbf45-8061-4ea4-9cbf-b04dd6327316",
+            "containerId": "fcd04d7e-156e-499e-92f5-12049ab983a8",
+            "name": "getUser",
+            "url": "user/getUser/647cc32872f69d46c6ad6108",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2023-06-08T03:44:46.745Z",
+            "modified": "2023-06-08T03:46:27.855Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": "\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDdjYzMyODcyZjY5ZDQ2YzZhZDYxMDgiLCJuYW1lIjoiam9yZ2l0byIsImxhc3RuYW1lIjoibW9jaGlsZXJvIiwiZW1haWwiOiJhZWxrZmFzIiwicm9sZSI6Ik1PQ0hJTEVSTyIsImlhdCI6MTY4NjE5NTk3MiwiZXhwIjoxNjg2MjEzOTcyfQ.qxef208JZlSIQ14mlpUfapza5Z_USafgpjaMUphBKtg\""
+                }
+            ],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "9a7f07a7-d6b0-4f0a-89b6-e26e8617873d",
+            "colId": "fb3cbf45-8061-4ea4-9cbf-b04dd6327316",
+            "containerId": "6dc49ad3-0234-419c-bedc-c0ba2328de1a",
+            "name": "test ",
+            "url": "hotel/test",
+            "method": "GET",
+            "sortNum": 80000,
+            "created": "2023-06-08T07:51:36.713Z",
+            "modified": "2023-06-08T07:51:44.990Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "6311bfaa-87b6-485e-9f60-5e41723dba3b",
+            "colId": "fb3cbf45-8061-4ea4-9cbf-b04dd6327316",
+            "containerId": "6dc49ad3-0234-419c-bedc-c0ba2328de1a",
+            "name": "createHotel",
+            "url": "hotel/createHotel",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2023-06-08T08:20:20.163Z",
+            "modified": "2023-06-08T08:26:08.107Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": " \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDdjYzMxNzcyZjY5ZDQ2YzZhZDYxMDMiLCJuYW1lIjoiYWRtaW4iLCJsYXN0bmFtZSI6IjQxOCIsImVtYWlsIjoiZW1haWwiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2ODYyMTIzOTIsImV4cCI6MTY4NjIzMDM5Mn0.GngyxquV6na3XE9alOtGyGgylu8R3XVfqidpxThdw58\""
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "name",
+                        "value": "Esquipulitas"
+                    },
+                    {
+                        "name": "address",
+                        "value": "Esquipulas"
+                    },
+                    {
+                        "name": "description",
+                        "value": "cerca de la iglesia"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "d930a7a8-464d-4663-9689-275364097b7f",
+            "colId": "fb3cbf45-8061-4ea4-9cbf-b04dd6327316",
+            "containerId": "6dc49ad3-0234-419c-bedc-c0ba2328de1a",
+            "name": "addRoom",
+            "url": "hotel/addRoom/648190a0564847dc35239d1a",
+            "method": "PUT",
+            "sortNum": 100000,
+            "created": "2023-06-08T08:52:51.253Z",
+            "modified": "2023-06-08T08:54:34.594Z",
+            "headers": [
+                {
+                    "name": "Authorization",
+                    "value": " \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDdjYzMxNzcyZjY5ZDQ2YzZhZDYxMDMiLCJuYW1lIjoiYWRtaW4iLCJsYXN0bmFtZSI6IjQxOCIsImVtYWlsIjoiZW1haWwiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2ODYyMTIzOTIsImV4cCI6MTY4NjIzMDM5Mn0.GngyxquV6na3XE9alOtGyGgylu8R3XVfqidpxThdw58\""
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "name",
+                        "value": "suite"
+                    },
+                    {
+                        "name": "capacity",
+                        "value": "2"
+                    },
+                    {
+                        "name": "price",
+                        "value": "300"
+                    }
+                ]
+            },
+            "tests": []
+        }
+    ],
+    "settings": {
+        "options": {
+            "baseUrl": "http://localhost:3418/"
+        }
+    }
+}

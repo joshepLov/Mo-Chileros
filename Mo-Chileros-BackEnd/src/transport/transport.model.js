@@ -3,37 +3,42 @@
 const mongoose = require('mongoose')
 
 const transportSchema = mongoose.Schema({
-    type:{
-        type: String,
-        required: true,
-        upperCase: true
+    status: {
+        type: Boolean,
+    },
+    name:{
+        type:String,
+        required:true
+    },
+    type: {
+        type: String, 
+        required: true
+    },
+    typeVehicle:{
+        type:String,
+        required: true
     },
     description:{
         type: String,
-        required: true 
+        required: true
     },
-    price: {
+    price:{
         type: Number,
         required: true
     },
     capacity: {
-        type: Number, 
+        type: Number,
         required: true
     },
-    image: {
-        type: String,
-        required: false 
+    image:{
+        type:String
     },
-    status: {
-        type: Boolean,
-        required: true
-    },
-    versionKey: false
+    states:[{
+        state :{type: mongoose.Schema.Types.ObjectId},
+        name:{type: String}
+        }], 
+        
+    })
 
+module.exports = mongoose.model('Transport', transportSchema)
 
-},
-{
-    versionKey: false
-})
-
-module.exports  = mongoose.model('Transport', transportSchema)
