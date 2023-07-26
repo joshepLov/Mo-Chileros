@@ -22,7 +22,14 @@ exports.createHotel = async (req, res) => {
         let dataUser = req.user
         let data = req.body
         let dateUser = new Date(data.date)
-        const datesArray = Array.isArray(data.date) ? data.date : [data.date];
+        const datesArray = []
+
+        for (let key in data) {
+          datesArray.push({ field: key, value: data[key] });
+        }
+
+        console.log(datesArray);
+
         //datos obligatorios
         let params = {
             date : data.date
@@ -65,7 +72,7 @@ exports.createHotel = async (req, res) => {
         if(dateUser <= existsTravel.dateStart || dateUser >= limitDate){
           return res.status(418).send({message: 'this date cannot be use for your travel'})
         }
-       
+
         //datos obligatorios reservatin
         data.price = existsHotel.room[0].price
         data.user = dataUser.sub
@@ -75,7 +82,7 @@ exports.createHotel = async (req, res) => {
         
         //creacion del hotel
         let reservation = new HotelReservation(data);
-        reservation.dates = datesArray.map(dateString => ({ date: new Date(dateString) }));
+        reservation.dates = datesArray //[{date:datesArray}];
         await reservation.save();
         return res.send({ message: "hotel created succesfuly", reservation });
 
