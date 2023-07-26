@@ -1,55 +1,62 @@
 'use strict'
 
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema({
-    DPI: {
-        type: Number,
+    dpi:{
+        type:Number, 
+        required : true, 
+        maxLength: 13
+    }, 
+    username:{
+        type: String,
+        required: true
+    },
+    rank :{
+        type: Number, 
+        required:false
+    }, 
+    name :{
+        type: String,
+        required: true
+    },
+    lastname:{
+        type: String, 
+        required: true
+    },
+    age:{
+        type: Number, 
         required: true,
-        unique: true
+        maxLength: 2
     },
-    name: {
-        type: String,
+    email:{
+        type: String, 
+        required: true
+    }, 
+    password:{
+        type:String, 
         required: true
     },
-    surname: {
+    history:[{
+        name:{type:String}, 
+        
+    }], 
+    role:{
+        type:String, 
+        required:false
+    }, 
+    image:{
         type: String,
+        required:false
+    }, 
+    phone:{
+        type: Number, 
         required: true
     },
-    email: {
-        type: String,
-        required: true,  //CON ESTO SE LOGUEARÁ 
-        unique: true,
-        lowercase: true
-    },
-    age: {
-        type: Number,
-        required: true,  
-    },
-    password: {
-        type: String,   //CON ESTO SE LOGUEARÁ 
-        required: true
-    }   ,
-    phone: {
-        type: String,
-        required: true
-    },
-    range: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
-        required: true,
-        uppercase: true
-    },
-    image: {
-        type: String,
-        required: false
+    status:{
+        type: Boolean
     }
-},
-{
-    versionKey: false
-});
+
+})
 
 module.exports = mongoose.model('User', userSchema);

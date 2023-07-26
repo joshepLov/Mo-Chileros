@@ -37,29 +37,31 @@ exports.createTravel = async (req, res) => {
         transport : data?.transport, 
         cordinator: data?.cordinator
       };
-      
+      console.log('1')
       //validacion de parametros no permitidos
       const hasDeniedParams = Object.values(paramsDenied).some(
         (param) => param !== undefined
       );
+      console.log('2')
       if (hasDeniedParams)
       return res
         .status(422)
         .send({ message: "Have submitted some data that cannot be updated" });
 
-      
+      console.log('3')
       //validar datos de ruta
       let findRoute = await Route.findOne({_id:routeId})
+      console.log(routeId)
       if(!findRoute) return res.status(418).send({message: 'Ooops something happen try later'})
-      
+      console.log('4')
       // validacion de parametros obligatorios
       let validateParams = validateData(params);
       if (validateParams) return res.status(403).send(validateParams);
-        
+        console.log('5')
       //validacion de fechas seleccionadas 
       if(startDate < dateNow|| endDate < dateNow) return res.status(403).send(
         {message: 'you cannot select a date in the past'})
-      
+      console.log('7')
       if(endDate < startDate) return res.status(403).send({message: 'please check your dates'})
      
       // verificar si existe un viaje 
