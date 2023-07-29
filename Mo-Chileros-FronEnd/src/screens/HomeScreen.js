@@ -1,23 +1,79 @@
-import React from 'react'
-import { View, Image, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
 import { Header } from '../Components/Header';
 import * as Fonts from '../utils/Fonts'
 import { CardRoute } from '../Components/CardRoute';
-
+import axios from 'axios';
+import {LOCAL_HOST} from '@env'
+import mochila from '../../assets/backpack-load.gif'
+import { Loading } from '../Components/Loading';
 
 export const HomeScreen = ({ username, image, caption }) => {
+  //para esperar datos
+  const [loading, setLoading] = useState(true)
+  //ruta
+  const [routes, setRoutes] = useState([{}])
+
+
+//funcion obtener rutas
+ const getRoutes = async() =>{
+  try {
+    let response = await axios.get(`http://192.168.1.9:3418/route/getRoutes`)
+    let data = response.data
+    setRoutes(response.data.route)
+    setTimeout(()=> setLoading(false), 5500)
+    
+  } catch (err) {
+    console.log(err)
+    alert('error')
+  }
+
+ }
+
+ useEffect(()=>{
+    const fetchData = async ()=>{
+      await getRoutes();
+    };
+    fetchData();
+ }, [])
+
+ if (loading) return (<>
+  <Loading></Loading>
+ </>);
+  
   return (  
     <View style={styles.body}>
+      <ScrollView>
+
       <Header></Header>
-      <CardRoute
-        username={'juanito'}
-        caption={'Explorando por las serpenteantes sendas, descubrí un paraíso escondido. Montañas majestuosas se alzaban hacia el cielo, bañadas por la cálida luz del atardecer. El río cristalino susurraba melodías mientras acariciaba los prados verdes. Un lugar mágico que me hizo sentir pequeño frente a la inmensidad de la naturaleza. Cada instante en este edén es un sueño hecho realidad. El viajero en mí se regocija al encontrarse con tal maravilla. ¡Qué dicha poder contemplar esta belleza única en el mundo!'}
-      ></CardRoute>
+      {
+        routes?.map(({_id, description, place}, index)=>{
+          return (
+
+            <CardRoute
+            idRoute={_id}
+            placeName={place}
+            caption={description}
+            ></CardRoute>
+            
+            )
+        })
+      }
+      </ScrollView>
   </View>
 )
 }
 
 const styles = StyleSheet.create({
+  gif:{
+    height: '50%', 
+    width:'70%',
+    marginTop:'50%',
+    display:'flex',
+    alignItems: 'center',
+    marginLeft:'15%', 
+    marginRight:'15%'
+  },
   body:{
     backgroundColor:'FFFFFF',
     marginTop: 30

@@ -10,6 +10,11 @@ const upload = connectMultiparty({uploadDir: './uploads/User'})
 
 
 api.get('/test', routeController.test)
+// ============================Create===============================
 api.post('/createRoute', [ensureAuth], routeController.createRoute)
+// ============================Read ==============================
+api.get('/getRoutes',  routeController.getRoutesMochilero)
+api.get('/getRoute/:id', routeController.getRouteMochilero)
+
 
 module.exports = api

@@ -1,32 +1,41 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome, Foundation, MaterialIcons } from '@expo/vector-icons';
-
+import { useNavigation } from '@react-navigation/native';
 
 const PLACEHOLDER_IMAGE_URL =
   'https://media.traveler.es/photos/61377d2370e3cff8b85f9d8b/16:9/w_1200,h_675,c_limit/28469.jpg';
 
 
-export const CardRoute = ({ photo, placeName, caption }) => {
+export const CardRoute = ({ photo, placeName, caption, name, ky, idRoute }) => {
+  
+  const navigation = useNavigation();
   const [expanded, setExpanded] = useState(false);
 
+  //expandir texto 
   const toggleCaption = () => {
     setExpanded(!expanded);
   };
+
+  const goToRoute = (idRoute)=>{
+    navigation.navigate('RouteView', {routeId:idRoute })
+  }
 
   return (
     <View style={styles.postContainer}>
       <View style={styles.placeView}>
         <Foundation name="flag" size={25} color="black" />
         <View style={styles.namePlace}>
-          <Text style={styles.placeText}>San juan la laguna</Text>
+          <Text style={styles.placeText}>{placeName}</Text>
           <Text style={styles.nameText}>este es un texto</Text>
         </View>
       </View>
+      <TouchableOpacity onPress={()=>goToRoute(idRoute)} key={ky}>
       <Image source={{ uri: PLACEHOLDER_IMAGE_URL }} style={styles.postImage} />
+      </TouchableOpacity>
       <View style={styles.mainNameView}>
         <View style={styles.nameView}>
-          <Text style={styles.username}>Un viaje por el Lago de Atitlan</Text>
+          <Text style={styles.username}>{placeName}</Text>
         </View>
         <MaterialIcons name="bookmark" size={24} color="black" />
       </View>

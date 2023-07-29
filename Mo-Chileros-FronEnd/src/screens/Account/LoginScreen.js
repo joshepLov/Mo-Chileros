@@ -43,9 +43,7 @@ export default function LoginScreen() {
       setLoggedIn(true)
     
       //setear los datos del usuario
-      console.log(data.logged);
       setDataUser(data.logged);
-      console.log(AsyncStorage.getItem('dataUser'));
       navigation.navigate('AccountIndex' ,{idProfile:data.logged.id})
       //validate message
       if (data.message) {

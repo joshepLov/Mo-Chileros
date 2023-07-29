@@ -51,15 +51,34 @@ exports.createRoute = async(req,res)=>{
 
 
 //Obtener Rutas 
-exports.getRouteMochilero = async (req,res) =>{
+exports.getRoutesMochilero = async (req,res) =>{
     try {
         
         // find route 
-        let route = await Route.find({status:true}).select('-_id -status')
+        let route = await Route.find({status:true}).select(' -status')
         //sino existe 
         if(!route || route.lenght == 0) return res.send ({ message:'doesnt exist route, create One!'})
 
-        return res.send ({message: route})
+        return res.send ({route})
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({message: 'Server Error, try later'})
+        
+    }
+}
+
+//Obtener Ruta
+exports.getRouteMochilero = async (req,res) =>{
+    try {
+        let idroute = req.params.id; 
+
+        
+        // find route 
+        let route = await Route.findOne({_id:idroute,status:true}).select('-status')
+        //sino existe 
+        if(!route) return res.send ({ message:'doesnt exist route, create One!'})
+
+        return res.send ({route})
     } catch (err) {
         console.log(err)
         return res.status(500).send({message: 'Server Error, try later'})
@@ -68,7 +87,7 @@ exports.getRouteMochilero = async (req,res) =>{
 }
 
 //Obtener Rutas 
-exports.getRouteModereator = async (req,res) =>{
+exports.getRoutesModereator = async (req,res) =>{
     try {
         
         // find route 

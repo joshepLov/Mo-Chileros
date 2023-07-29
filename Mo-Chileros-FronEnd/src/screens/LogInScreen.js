@@ -20,7 +20,6 @@ export const LogInScreen = ({navigation}) => {
         try {
           const response = await axios.post('http://192.168.1.9:3418/user/login', log);
           const data = response.data;
-          console.log(data, "23");
     
           if (data.message) {
             alert(data.message);

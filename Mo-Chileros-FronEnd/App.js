@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 //paginas 
 import { AuthNavigation } from './src/Navigation/AuthNavigation';
 
+
 export const AuthContext = createContext()
 
 export default function App() {
@@ -20,36 +21,42 @@ export default function App() {
     role: '',
     id:'',
   })
+  console.log(dataUser);
   //funcion para obtener y setear datos 
-  const AuthProvider = ({ children }) => {
-    //reload 
-    useEffect(() => {
-      checkToken();
-    }, []);
-    console.log(AsyncStorage.getItem('id'))
-    //chekear log
-    let checkToken = async () => {
+
+  //chekear log
+  let checkToken = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         const storedData = await AsyncStorage.getItem('id')
-        
-         
+          
       } catch (error) {
         console.log('Error retrieving token:', error);
         setLoggedIn(null);
       }
-    }}
-      return (
-        <>
-      <NavigationContainer>
-      <AuthContext.Provider  value={{ loggedIn, setLoggedIn, dataUser, setDataUser }}>
-      <AuthNavigation/>
-      </AuthContext.Provider>
-      </NavigationContainer>
-      </>
-    )
-}
+    }
+    
+    //reload 
+    useEffect(() => {
+      checkToken();
+    }, []);
 
+    const AuthProvider = ({ children }) => {
+      return (
+        <AuthContext.Provider value={{ loggedIn, setLoggedIn, dataUser, setDataUser }}>
+          <AuthNavigation/>
+        </AuthContext.Provider>
+      );
+    };
+    
+    return (
+      <NavigationContainer>
+      <AuthProvider>
+        <AuthNavigation />
+      </AuthProvider>
+    </NavigationContainer>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
