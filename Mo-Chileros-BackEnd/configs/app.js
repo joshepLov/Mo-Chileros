@@ -16,6 +16,7 @@ const routeRoutes = require('../src/routesTravel/routes.routes')
 const travelRoutes = require('../src/travel/travel.routes')
 const reservationHotelRoutes = require('../src/reservationHotel/reservationHotel.routes')
 const reservationTransportRoutes = require('../src/reservationTransport/reservationTrasnport.routes')
+const billRoutes = require('../src/bill/bill.routes')
 
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
@@ -30,6 +31,7 @@ app.use('/route', routeRoutes)
 app.use('/travel', travelRoutes)
 app.use('/reservationHotel', reservationHotelRoutes)
 app.use('/reservationTrasnport',reservationTransportRoutes )
+app.use('/bill', billRoutes)
 
 exports.initServer = ()=>{
     app.listen(port);

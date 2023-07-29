@@ -3,40 +3,45 @@
 const mongoose = require('mongoose')
 //hola mundo 
 const RouteSchema = mongoose.Schema({
-    status:{
+    status: {
         type: Number
     },
     routeDuration: {
         type: Number
     },
-    name :{
+    name: {
         type: String
-    }, 
-    description:{
-        type:String
     },
-    price:{
+    description: {
+        type: String
+    },
+    price: {
         type: Number
     },
-    capacityMembers:{
-        type:Number
+    capacityMembers: {
+        type: Number
     },
-    place:{
-        type:String
+    place: {
+        type: String
     },
-    score:{
-        type:Number
+    score: {
+        type: Number
     },
-    creator:{
-        type: mongoose.Schema.Types.ObjectId, 
-           ref: 'User'
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
-    activities:[{
+    activities: [{
         Activity: {
             type: String
         },
-    }]
-    
-}) 
+    }],
+    image: {
+        type: String,
+        required: false
+
+    },
+
+})
 
 module.exports = mongoose.model('Route', RouteSchema);

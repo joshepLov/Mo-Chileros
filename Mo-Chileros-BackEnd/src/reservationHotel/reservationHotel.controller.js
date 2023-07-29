@@ -2,8 +2,10 @@
 
 const Hotel = require('../hotel/hotel.model')
 const HotelReservation = require('./reservationHotel.model')
+const TransportReservation = require('../reservationTransport/reservationTransport.model')
 const Travel = require('../travel/travel.model')
 const User = require('../User/user.model')
+const Bill = require('../bill/bill.model')
 const user = ['name']
 const hotel = ['name', 'address']
 const room = ['name', 'price']
@@ -102,7 +104,8 @@ exports.reservacion = async (req, res) => {
     let user = req.user
     let data = req.body
 
-    //Buscar la habitacion 
+    //Buscar el transporte
+    let { price } = await TransportReservation.findOne({ travel: idTravel })
 
 
     //Verificar que exista el viaje y este agregado como un miembro
@@ -110,7 +113,7 @@ exports.reservacion = async (req, res) => {
     if (!existTrabel) return req.status(403).send({ message: 'please check your credentials' })
 
     //Verificar que el hotel a reservar exista y la habitacion
-    let existHotel = await Hotel.findOne({ _id: idHotel, 'room._id': idRoom })
+    let existHotel = await Hotel.findOne({ _id: idHotel, 'room._id': idRoom }, { 'room.$': 1 })
     if (!existHotel) return res.status(409).send({ message: "Hotel doesnt found exist" });
 
     //Fechas de la reservacion
@@ -122,9 +125,7 @@ exports.reservacion = async (req, res) => {
     if (Date.parse(startDate) !== Date.parse(existTrabel.dateStart) || Date.parse(endDate) !== Date.parse(existTrabel.dateEnd))
       return res.status(418).send({ message: 'Las fechas de reservacion deven de ser iguales a las del viaje' })
 
-    /* //No puede utilizar fechas pasadas
-    if (Date.parse(dateNow) > Date.parse(startDate) || Date.parse(dateNow) > Date.parse(endDate)) return res.status(418).send({ message: 'You can not use past dates' })
- */
+
     //La fecha final no puede ser menor a la inicial
     if (endDate < startDate) return res.status(418).send({ message: 'La fecha final deve ser igual o mayor a la inicial' })
 
@@ -133,6 +134,8 @@ exports.reservacion = async (req, res) => {
 
     let validacion = await verificarFechas(room, startDate, endDate)
     if (validacion === true) return res.status(418).send({ message: 'These dates are already taken' })
+
+    console.log(existHotel)
 
     data.travel = idTravel
     data.hotel = idHotel
@@ -143,7 +146,27 @@ exports.reservacion = async (req, res) => {
     data.price = existHotel.room[0].price
     console.log(existHotel)
 
-    //Cobrarle el usuario
+    //Verificar si existe una factura
+    let bill = await Bill.findOne({ travel: idTravel, user: user.sub })
+    if (bill) {
+      let pricePerson = price / existTrabel.members.length
+      let totalPrice = data.price + pricePerson
+
+      let updateBill = await Bill.findOneAndUpdate(
+        { travel: idTravel, user: user.sub },
+        {
+          roomPrice: data.price,
+          transportPrice: pricePerson,
+          totalPrice
+        },
+        { new: true }
+      )
+
+      let reservacion = new HotelReservation(data)
+      await reservacion.save()
+      return res.send({ message: 'Se ha agregado la resrvacion' })
+
+    }
 
     let reservacion = new HotelReservation(data)
     await reservacion.save()
@@ -160,11 +183,10 @@ exports.reservacion = async (req, res) => {
 
 
 //Funcion para verificar las fechas
-exports.verificarFechas = async (room, startDate, endDate) => {
+const verificarFechas = async (room, startDate, endDate) => {
   try {
     if (room.length !== 0) {
       for (let i = 0; i <= room.length; i++) {
-        console.log(room[i])
         if (startDate <= room[i].dateFinal) return true
       }
       return false
@@ -220,7 +242,14 @@ exports.cancelReservation = async (req, res) => {
     //Parametros
     let idReservation = req.params.id
     let idTravel = req.params.idTravel
-    let user = req.user
+    let { sub } = req.user
+
+    //Buscar reservacion de transporte
+    let { price } = await TransportReservation.findOne({ travel: idTravel })
+
+    //Verificar que este en el viaje
+    let existTrabel = await Travel.findOne({ _id: idTravel, 'members.user': sub })
+    if (!existTrabel) return req.status(403).send({ message: 'please check your credentials' })
 
     //Buscar la fecha del viaje
     const dateNow = new Date()
@@ -232,6 +261,31 @@ exports.cancelReservation = async (req, res) => {
 
     console.log(Date.parse(dateNow), Date.parse(dateStart))
     if (Date.parse(dateNow) === Date.parse(dateStart)) return res.status(422).send({ message: 'No puedes cancelar la reservacion' })
+
+
+    //Buscar si exite una factura
+    let bill = await Bill.findOne({ travel: idTravel, user: sub })
+    if (bill) {
+      let roomPrice = 0
+      let pricePerson = price / existTrabel.members.length
+      let totalPrice = pricePerson
+
+      let updateBill = await Bill.findOneAndUpdate(
+        { travel: idTravel, user: sub },
+        {
+          roomPrice,
+          transportPrice: pricePerson,
+          totalPrice
+        },
+        { new: true }
+      )
+
+      let deleteReservation = await HotelReservation.findOneAndDelete({ _id: idReservation })
+      if (!deleteReservation) return res.status(400).send({ message: 'No se pudo cancelar la reservacion' })
+      return res.send({ message: 'Reservacion cancelada' })
+
+    }
+
 
     let deleteReservation = await HotelReservation.findOneAndDelete({ _id: idReservation })
     if (!deleteReservation) return res.status(400).send({ message: 'No se pudo cancelar la reservacion' })
@@ -253,10 +307,15 @@ exports.updateReservation = async (req, res) => {
     let { sub } = req.user
     let data = req.body
 
+    //Buscar el transporte
+    let { price } = await TransportReservation.findOne({ travel: idTravel })
+
 
     //Verificar que este en el viaje
     let existTrabel = await Travel.findOne({ _id: idTravel, 'members.user': sub })
     if (!existTrabel) return req.status(403).send({ message: 'please check your credentials' })
+
+
 
     //Obtener la fecha que inicia el viaje
     let dateNow = new Date()
@@ -285,6 +344,7 @@ exports.updateReservation = async (req, res) => {
     if (validacion === true) return res.status(418).send({ message: 'These dates are already taken' })
 
 
+    //Modificar la reservacion
     let updateReservation = await HotelReservation.findOneAndUpdate(
       { _id: idReservation },
       {
@@ -294,13 +354,29 @@ exports.updateReservation = async (req, res) => {
       { new: true }
     )
 
+    //Buscar si existe una factura
+    let bill = await Bill.findOne({ travel: idTravel, user: sub })
+    if (bill) {
+      let pricePerson = price / existTrabel.members.length
+      let totalPrice = pricePerson + existHotel.room[0].price
+      let updateBill = await Bill.findOneAndUpdate(
+        { travel: idTravel, user: sub },
+        {
+          roomPrice: existHotel.room[0].price,
+          transportPrice: pricePerson,
+          totalPrice
+        },
+        { new: true }
+      )
+
+      console.log(updateBill)
+
+      if (!updateReservation) return res.status(400).send({ message: 'No se pudo modificar la reservacion' })
+      return res.send({ message: 'Reservacion modificada' })
+    }
+
     if (!updateReservation) return res.status(400).send({ message: 'No se pudo modificar la reservacion' })
     return res.send({ message: 'Reservacion modificada' })
-
-
-
-
-
 
   } catch (e) {
     console.log(e)
