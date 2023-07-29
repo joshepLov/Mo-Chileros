@@ -37,7 +37,6 @@ exports.createRoute = async(req,res)=>{
         //creacion ruta 
         let route =  new Route(data);
         await route.save();
-        console.log(findPlace.length);
         if (findPlace.lenght == 0) 
         return res.send({message: 'a few steps more', route})
         else

@@ -88,8 +88,10 @@ exports.register = async (req, res) => {
       data.password = await encrypt(data.password);
       data.role = "MOCHILERO";
       let user = new User(data);
+      const token = await createToken(user)
       await user.save();
-      return res.send({ message: "account create succesfuly" });
+       let id = user._id
+      return res.send({ message: "account create succesfuly", id, token });
     }
     return res
       .status(409)
@@ -123,7 +125,11 @@ exports.login = async (req, res) => {
       return res.status(404).send({ message: "user not found" });
     } else if (user && (await checkPassword(data.password, user.password))) {
       let token = await createToken(user);
-      return res.send({ message: `Welcome to Mochileros ${user.name}`, token });
+      const logged = {
+        name: `${user.name} ${user.lastname}`,
+        role: user.role, photo : user.photo, id: user._id
+      };
+      return res.send({ message: `Welcome to Mochileros ${user.name}`, token, logged});
     } else {
       return res.status(401).send({ message: "please check your credentials" });
     }

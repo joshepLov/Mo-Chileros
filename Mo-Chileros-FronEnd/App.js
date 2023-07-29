@@ -4,23 +4,20 @@ import { StyleSheet, Text, View } from 'react-native';
 import { createContext, useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
-import {useFonts} from 'expo-font'
+
 //paginas 
 import { AuthNavigation } from './src/Navigation/AuthNavigation';
 
-
+export const AuthContext = createContext()
 
 export default function App() {
   
   
-  const [fontsLoaded] = useFonts ({
-    'Caesar Dressing' : require('./assets/fonts/CaesarDressing-Regular.ttf')
-  })
+
   const [loggedIn, setLoggedIn] = useState(null);
   const [dataUser, setDataUser] = useState({
     name: '',
     role: '',
-    photo: '',
     id:'',
   })
   //funcion para obtener y setear datos 
@@ -29,34 +26,28 @@ export default function App() {
     useEffect(() => {
       checkToken();
     }, []);
-  
+    console.log(AsyncStorage.getItem('id'))
     //chekear log
     let checkToken = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
         const storedData = await AsyncStorage.getItem('id')
-
+        
          
       } catch (error) {
         console.log('Error retrieving token:', error);
         setLoggedIn(null);
       }
     }}
-    
-    if(fontsLoaded){
-
       return (
         <>
       <NavigationContainer>
+      <AuthContext.Provider  value={{ loggedIn, setLoggedIn, dataUser, setDataUser }}>
       <AuthNavigation/>
+      </AuthContext.Provider>
       </NavigationContainer>
       </>
     )
-  }else {
-    <Text>loading</Text>
-  }
- 
-  
 }
 
 

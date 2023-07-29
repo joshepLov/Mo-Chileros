@@ -4,15 +4,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import {NavigationContainer} from '@react-navigation/native';
 import {useFonts} from 'expo-font'
 
-import { Foundation } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons,Foundation } from '@expo/vector-icons';
+import { FontAwesome, Entypo} from '@expo/vector-icons';
 
 import { HomeScreen } from '../screens/HomeScreen';
 import { LogInScreen } from '../screens/LogInScreen';
 import { TestScreen } from '../screens/TestScreen';
 import theme from '../utils/userThem';
+import { AccountIndex } from '../screens/Account/AccountIndex';
+import { RegisterScreen } from '../screens/Account/RegisterScreen';
 
 const Tab = createBottomTabNavigator()
 // const Stack = createNativeStackNavigator();
@@ -51,7 +51,7 @@ export default MyTabs = () => {
     {/* Screen nuevo viaje */}
     <Tab.Screen 
       name ='NewTravel'
-      component ={TestScreen}
+      component ={RegisterScreen}
       options={{
         tabBarInactiveTintColor: '#292262',
         tabBarActiveTintColor: 'green',
@@ -60,15 +60,29 @@ export default MyTabs = () => {
             )
         }} 
         />  
+
+    {/* {vista viaje actual} */}
+    <Tab.Screen 
+      name ='CurrentTravel'
+      component ={AccountIndex}
+      options={{
+        tabBarInactiveTintColor: '#292262',
+        tabBarActiveTintColor: 'green',
+        tabBarIcon: ({color, size})=> (
+          <MaterialIcons name='map'color={color} size={40}/>
+          )
+        }} 
+        /> 
     
     {/* Screen user  */}
     <Tab.Screen 
-      name ='User'
-      component ={TestScreen}
+      name ='AccountIndex'
+      component ={AccountIndex}
       options={{
+        tabBarInactiveTintColor: '#292262',
         tabBarActiveTintColor: 'green',
         tabBarIcon: ({color, size})=> (
-          <FontAwesome name='user'color={theme.color.secondary} size={40}/>
+          <FontAwesome name='user'color={color} size={40}/>
           )
         }} 
         />  

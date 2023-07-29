@@ -9,7 +9,7 @@ const connectMultiparty = require('connect-multiparty')
 const upload = connectMultiparty({uploadDir: './uploads/User'})
 
 
-api.get('/test',[ensureAuth,isAdmin], userController.test)
+api.get('/test', userController.test)
 api.post('/registerAdmin',[ensureAuth,isAdmin], userController.registerAdmin)
 api.get('/getUser/:id', [ensureAuth], userController.getUser)
 api.get('/getUsers', [ensureAuth], userController.getUsers)
