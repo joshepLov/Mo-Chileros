@@ -3,13 +3,8 @@
 const mongoose = require('mongoose')
 //hola mundo 
 const RouteSchema = mongoose.Schema({
-<<<<<<< HEAD
     status:{
         type: Boolean
-=======
-    status: {
-        type: Number
->>>>>>> dev
     },
     routeDuration: {
         type: Number

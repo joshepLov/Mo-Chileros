@@ -39,14 +39,8 @@ exports.createRoute = async (req, res) => {
         //creacion ruta 
         let route = new Route(data);
         await route.save();
-<<<<<<< HEAD
         if (findPlace.lenght == 0) 
         return res.send({message: 'a few steps more', route})
-=======
-        console.log(findPlace.length);
-        if (findPlace.lenght == 0)
-            return res.send({ message: 'a few steps more', route })
->>>>>>> dev
         else
             return res.send({ message: 'a few steps more', route, findPlace })
 
@@ -59,7 +53,6 @@ exports.createRoute = async (req, res) => {
 
 
 //Obtener Rutas 
-<<<<<<< HEAD
 exports.getRoutesMochilero = async (req,res) =>{
     try {
         
@@ -76,19 +69,6 @@ exports.getRoutesMochilero = async (req,res) =>{
     }
 }
 
-//Obtener Ruta
-exports.getRouteMochilero = async (req,res) =>{
-    try {
-        let idroute = req.params.id; 
-
-        
-        // find route 
-        let route = await Route.findOne({_id:idroute,status:true}).select('-status')
-        //sino existe 
-        if(!route) return res.send ({ message:'doesnt exist route, create One!'})
-
-        return res.send ({route})
-=======
 exports.getRouteMochilero = async (req, res) => {
     try {
 
@@ -98,7 +78,6 @@ exports.getRouteMochilero = async (req, res) => {
         if (!route || route.lenght == 0) return res.send({ message: 'doesnt exist route, create One!' })
 
         return res.send({ message: route })
->>>>>>> dev
     } catch (err) {
         console.log(err)
         return res.status(500).send({ message: 'Server Error, try later' })
@@ -107,11 +86,7 @@ exports.getRouteMochilero = async (req, res) => {
 }
 
 //Obtener Rutas 
-<<<<<<< HEAD
 exports.getRoutesModereator = async (req,res) =>{
-=======
-exports.getRouteModereator = async (req, res) => {
->>>>>>> dev
     try {
 
         // find route 

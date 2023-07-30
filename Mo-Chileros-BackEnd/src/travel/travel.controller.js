@@ -17,18 +17,6 @@ exports.test = async (req, res) => {
 
 // creacion del TRAVEL
 exports.createTravel = async (req, res) => {
-<<<<<<< HEAD
-    try {
-      //data
-      let routeId = req.params.routeId;
-      let dataUser = req.user;
-      let data = req.body
-      const dateNow = new Date()
-      const startDate = new Date(data.dateStart)
-      const endDate = new Date(data.dateEnd)
-      console.log(data);
-      console.log(routeId);
-=======
   try {
     //data
     let routeId = req.params.routeId;
@@ -37,7 +25,6 @@ exports.createTravel = async (req, res) => {
     const dateNow = new Date()
     const startDate = new Date(data.dateStart)
     const endDate = new Date(data.dateEnd)
->>>>>>> dev
 
     //datos obligatorios
     let params = {
@@ -45,7 +32,6 @@ exports.createTravel = async (req, res) => {
       dateEnd: data.dateEnd
     };
 
-<<<<<<< HEAD
 
       //parametros no permitidos
       let paramsDenied = {
@@ -61,55 +47,10 @@ exports.createTravel = async (req, res) => {
         (param) => param !== undefined
       );
       if (hasDeniedParams)
-=======
-    //parametros no permitidos
-    let paramsDenied = {
-      travelStatus: data?.travelStatus,
-      price: data?.price,
-      hotel: data?.hotel,
-      transport: data?.transport,
-      cordinator: data?.cordinator
-    };
-    console.log('1')
-    //validacion de parametros no permitidos
-    const hasDeniedParams = Object.values(paramsDenied).some(
-      (param) => param !== undefined
-    );
-    console.log('2')
-    if (hasDeniedParams)
->>>>>>> dev
       return res
         .status(422)
         .send({ message: "Have submitted some data that cannot be updated" });
 
-<<<<<<< HEAD
-      
-      //validar datos de ruta
-      let findRoute = await Route.findOne({_id:routeId})
-      if(!findRoute) return res.status(418).send({message: 'Ooops something happen try later'})
-      
-      // validacion de parametros obligatorios
-      let validateParams = validateData(params);
-      if (validateParams){
-
-        console.log(validateParams);
-        return (
-          res.status(403).send(validateParams)
-          )
-        }
-        
-      //validacion de fechas seleccionadas 
-      if(startDate < dateNow|| endDate < dateNow) return res.status(403).send(
-        {message: 'you cannot select a date in the past'})
-      
-      if(endDate < startDate) return res.status(403).send({message: 'please check your dates'})
-     
-      // verificar si existe un viaje 
-      let findTravel = await Travel.find({
-        $and: [{ status: true }, {dateStart: data.dateStart}],
-      });
-      console.log(data);
-=======
     console.log('3')
     //validar datos de ruta
     let findRoute = await Route.findOne({ _id: routeId })
@@ -125,7 +66,6 @@ exports.createTravel = async (req, res) => {
       { message: 'you cannot select a date in the past' })
     console.log('7')
     if (endDate < startDate) return res.status(403).send({ message: 'please check your dates' })
->>>>>>> dev
 
     // verificar si existe un viaje 
     let findTravel = await Travel.find({
