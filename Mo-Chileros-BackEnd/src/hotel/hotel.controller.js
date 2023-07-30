@@ -102,7 +102,7 @@ exports.getHotelsMochileros = async (req, res) => {
       if (!hotels) return res.status(404).send({ message: "hotels dont found" });
     // verificar si hotel viene vacio
       if (hotels.length == 0)  return res.status(404).send({ message: "hotels dont found" });
-    return res.send({ message: hotels });
+    return res.send({ hotels });
   } catch (err) {
     console.log(err);
     return res.status(500).send({ message: "error getting hotel" });
@@ -183,7 +183,7 @@ exports.getRooms = async (req, res) =>{
     if(foundRooms.length == 0)return res.status(404).send({message: 'rooms dont found'})
     
     //mostrar
-    return res.send({message: foundRooms})
+    return res.send({foundRooms})
   } catch (err) {
     console.log(err)
     return res.status(500).send({message: 'error searching rooms'})

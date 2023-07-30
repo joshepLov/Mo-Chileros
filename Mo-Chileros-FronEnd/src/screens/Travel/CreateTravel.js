@@ -7,13 +7,14 @@ import axios from 'axios';
 import {  AuthContext } from '../../../App';
 import { CalendarTest } from '../../Components/CalendarTest';
 import LoginScreen from '../Account/LoginScreen';
+import { useNavigation } from '@react-navigation/native';
 
 
 
 
 export const CreateTravel = () => {
 
-    
+  const navigation = useNavigation();
     const {loggedIn} = useContext(AuthContext)
 
     const [dateStart, setDateStart] = useState(null);
@@ -31,9 +32,9 @@ export const CreateTravel = () => {
     ]
 
     const routeParams = useRoute();
-    const {travelid} = routeParams.params;
+    const {route}= routeParams.params;
   
-    console.log(travelid);
+    console.log(route);
       // FUNTION TO LOGIN
   const saveDate = async () => {
     try {
@@ -46,14 +47,17 @@ export const CreateTravel = () => {
            console.log(dates);
           
 
-      const response = await axios.post(`http://${LOCAL_HOST}/travel/createTravel/64c46c19777182f457bfd945`,({dateStart ,dateEnd}), {headers:headers});
+      const response = await axios.post(`http://${LOCAL_HOST}/travel/createTravel/${route}`,({dateStart ,dateEnd}), {headers:headers});
       //save data
       const data = response.data;
-
+      const travelid = data.travel._id
+      console.log(data.travel._id,'este es el id');
+      console.log(travelid);
       //validate message
-      if (data.message) {
-        alert(data.message);
-      }
+        alert(data.message)
+        navigation.navigate('Hotels', {idTravel:travelid})
+        
+      
     } catch (e) {
       console.log(e);
       return ('Error al iniciar sesión');

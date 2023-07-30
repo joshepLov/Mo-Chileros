@@ -1,27 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
-import { Header } from '../Components/Header';
-import * as Fonts from '../utils/Fonts'
-import { CardRoute } from '../Components/CardRoute';
+import { CardRoute } from '../../Components/CardRoute'
 import axios from 'axios';
 import {LOCAL_HOST} from '@env'
-import mochila from '../../assets/backpack-load.gif'
-import { Loading } from '../Components/Loading';
+import { Loading } from '../../Components/Loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const HomeScreen = ({ username, image, caption }) => {
+export const Transport = () => {
   //para esperar datos
   const [loading, setLoading] = useState(true)
   //ruta
-  const [routes, setRoutes] = useState([{}])
+  const [transporte, setTransporte] = useState([{}])
 
 
 //funcion obtener rutas
- const getRoutes = async() =>{
+ const getTransport = async() =>{
   try {
-    let response = await axios.get(`http://192.168.1.9:3418/route/getRoutes`)
+      //headers para listar y obtener permisos 
+      const token = await AsyncStorage.getItem('token')
+      const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': token
+      }
+    let response = await axios.get(`http://192.168.1.9:3418/transport/getTransports`, {headers:headers})
     let data = response.data
-    setRoutes(response.data.route)
-    setTimeout(()=> setLoading(false), 5500)
+    console.log(data);
+    setTransporte(response.data.transport)
+    console.log(transporte);
+
+    setTimeout(()=> setLoading(false), 1000)
     
   } catch (err) {
     console.log(err)
@@ -32,7 +39,7 @@ export const HomeScreen = ({ username, image, caption }) => {
 
  useEffect(()=>{
     const fetchData = async ()=>{
-      await getRoutes();
+      await getTransport();
     };
     fetchData();
  }, [])
@@ -45,15 +52,15 @@ export const HomeScreen = ({ username, image, caption }) => {
     <View style={styles.body}>
       <ScrollView>
 
-      <Header></Header>
+    
       {
-        routes?.map(({_id, description, place}, index)=>{
+        transporte?.map(({_id, name,  description}, index)=>{
           return (
 
             <CardRoute
-            navigate={'RouteView'}
+            navigate ={'HotelView'}
             idRoute={_id}
-            placeName={place}
+            placeName={name}
             caption={description}
             ></CardRoute>
             

@@ -44,8 +44,9 @@ export const RegisterScreen = ({ navigation }) => {
 
       const response = await axios.post(`http://${LOCAL_HOST}/user/register`, register);
       // save data
-      const data = response.data;
+      let data = response.data;
       console.log(response.data)
+      console.log(data.id);
 
       if (data) {
         if (profileImage) {
@@ -67,13 +68,11 @@ export const RegisterScreen = ({ navigation }) => {
       AsyncStorage.setItem('token', data.token)
       AsyncStorage.setItem('id', data.id)
       //validate register
-      if (data.id) {
+      if (data.token) {
         setLoggedIn(true)
         alert(data.message);
-
-
         //change screen ingo user 
-        navigation.navigate('HomeTab')
+        navigation.navigate('home')
       } else {
         alert('ocurrio un error en el registro, porfavor verifica tus datos')
       }

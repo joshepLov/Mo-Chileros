@@ -77,7 +77,7 @@ exports.getRouteMochilero = async (req, res) => {
         //sino existe 
         if (!route || route.lenght == 0) return res.send({ message: 'doesnt exist route, create One!' })
 
-        return res.send({ message: route })
+        return res.send({route })
     } catch (err) {
         console.log(err)
         return res.status(500).send({ message: 'Server Error, try later' })

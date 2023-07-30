@@ -14,6 +14,8 @@ import theme from '../utils/userThem';
 import { AccountIndex } from '../screens/Account/AccountIndex';
 import { RegisterScreen } from '../screens/Account/RegisterScreen';
 import { CalendarTest } from '../Components/CalendarTest';
+import { Hotel } from '../screens/Hotel/Hotel';
+import { Transport } from '../screens/Transport/Transport';
 
 const Tab = createBottomTabNavigator()
 // const Stack = createNativeStackNavigator();
@@ -52,7 +54,7 @@ export default MyTabs = () => {
     {/* Screen nuevo viaje */}
     <Tab.Screen 
       name ='NewTravel'
-      component ={RegisterScreen}
+      component ={Hotel}
       options={{
         tabBarInactiveTintColor: '#292262',
         tabBarActiveTintColor: 'green',

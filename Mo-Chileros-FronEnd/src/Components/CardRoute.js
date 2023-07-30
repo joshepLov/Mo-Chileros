@@ -7,8 +7,8 @@ const PLACEHOLDER_IMAGE_URL =
   'https://media.traveler.es/photos/61377d2370e3cff8b85f9d8b/16:9/w_1200,h_675,c_limit/28469.jpg';
 
 
-export const CardRoute = ({ photo, placeName, caption, name, ky, idRoute }) => {
-  
+export const CardRoute = ({ photo, placeName, caption, ky, idRoute, navigate}) => {
+   
   const navigation = useNavigation();
   const [expanded, setExpanded] = useState(false);
 
@@ -17,9 +17,19 @@ export const CardRoute = ({ photo, placeName, caption, name, ky, idRoute }) => {
     setExpanded(!expanded);
   };
 
-  const goToRoute = (idRoute)=>{
-    navigation.navigate('RouteView', {routeId:idRoute })
-  }
+ 
+    const goToRoute = (idRoute)=>{
+      if (navigate == 'Rooms'  || navigate == 'RouteView') {
+        navigation.navigate(navigate, {routeId:idRoute })
+        
+      } else {
+        navigation.navigate(navigate)
+        
+      }
+    }
+
+  
+  
 
   return (
     <View style={styles.postContainer}>

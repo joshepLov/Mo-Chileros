@@ -1,27 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
-import { Header } from '../Components/Header';
-import * as Fonts from '../utils/Fonts'
-import { CardRoute } from '../Components/CardRoute';
+import { CardRoute } from '../../Components/CardRoute'
 import axios from 'axios';
 import {LOCAL_HOST} from '@env'
-import mochila from '../../assets/backpack-load.gif'
-import { Loading } from '../Components/Loading';
+import { Loading } from '../../Components/Loading';
+import { useRoute } from '@react-navigation/native';
 
-export const HomeScreen = ({ username, image, caption }) => {
+export const Room = () => {
+
+    const routeParams = useRoute();
+    const {routeId} = routeParams.params;
   //para esperar datos
   const [loading, setLoading] = useState(true)
   //ruta
-  const [routes, setRoutes] = useState([{}])
+  const [room, setRoom] = useState([{}])
 
 
 //funcion obtener rutas
- const getRoutes = async() =>{
+ const getTransport = async() =>{
   try {
-    let response = await axios.get(`http://192.168.1.9:3418/route/getRoutes`)
+   
+    let response = await axios.get(`http://192.168.1.9:3418/hotel/getRooms/${routeId}`)
     let data = response.data
-    setRoutes(response.data.route)
-    setTimeout(()=> setLoading(false), 5500)
+    console.log(data);
+    setRoom(response.data.foundRooms)
+    console.log(room);
+
+    setTimeout(()=> setLoading(false), 1000)
     
   } catch (err) {
     console.log(err)
@@ -32,7 +37,7 @@ export const HomeScreen = ({ username, image, caption }) => {
 
  useEffect(()=>{
     const fetchData = async ()=>{
-      await getRoutes();
+      await getTransport();
     };
     fetchData();
  }, [])
@@ -45,16 +50,16 @@ export const HomeScreen = ({ username, image, caption }) => {
     <View style={styles.body}>
       <ScrollView>
 
-      <Header></Header>
+    
       {
-        routes?.map(({_id, description, place}, index)=>{
+        room?.map(({_id, name,  capacity, price}, index)=>{
           return (
 
             <CardRoute
-            navigate={'RouteView'}
+            navigate ={'HotelView'}
             idRoute={_id}
-            placeName={place}
-            caption={description}
+            placeName={name}
+            caption={price}
             ></CardRoute>
             
             )

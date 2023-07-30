@@ -6,6 +6,8 @@ import Navigation from './Navigation'
 import { RegisterScreen } from '../screens/Account/RegisterScreen'
 import { Route } from '../screens/route/Route'
 import { CreateTravel } from '../screens/Travel/CreateTravel'
+import { Hotel } from '../screens/Hotel/Hotel'
+import { Room } from '../screens/Room/Room'
 
 const Stack = createStackNavigator()
 
@@ -37,6 +39,15 @@ export const AuthNavigation = () => {
     <Stack.Screen
     name='CreateTravel'
     component={CreateTravel}/>
+
+    <Stack.Screen 
+    name='Hotels'
+    component={Hotel}
+    />
+
+    <Stack.Screen
+    name='Rooms'
+    component={Room}/>
 
 
     </Stack.Navigator> 

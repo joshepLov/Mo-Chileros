@@ -59,7 +59,7 @@ exports.getTransportsMochileros = async (req, res) => {
       if (!transport) return res.status(404).send({ message: "transport dont found" });
     // verificar si transport viene vacio
       if (transport.length == 0)  return res.status(404).send({ message: "transport dont found" });
-    return res.send({ message: transport });
+    return res.send({ transport });
   } catch (err) {
     console.log(err);
     return res.status(500).send({ message: "error getting transport" });

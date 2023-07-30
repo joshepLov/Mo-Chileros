@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
-import { Header } from '../Components/Header';
-import * as Fonts from '../utils/Fonts'
-import { CardRoute } from '../Components/CardRoute';
+import { CardRoute } from '../../Components/CardRoute'
 import axios from 'axios';
 import {LOCAL_HOST} from '@env'
-import mochila from '../../assets/backpack-load.gif'
-import { Loading } from '../Components/Loading';
+import { Loading } from '../../Components/Loading';
 
-export const HomeScreen = ({ username, image, caption }) => {
+export const Hotel = ({ username, image, caption }) => {
   //para esperar datos
   const [loading, setLoading] = useState(true)
   //ruta
-  const [routes, setRoutes] = useState([{}])
+  const [hotel, setHotel] = useState([{}])
 
 
 //funcion obtener rutas
- const getRoutes = async() =>{
+ const getHotels = async() =>{
   try {
-    let response = await axios.get(`http://192.168.1.9:3418/route/getRoutes`)
+    let response = await axios.get(`http://192.168.1.9:3418/hotel/getHotels`)
     let data = response.data
-    setRoutes(response.data.route)
-    setTimeout(()=> setLoading(false), 5500)
+    console.log(data);
+    setHotel(response.data.hotels)
+    console.log(hotel);
+
+    setTimeout(()=> setLoading(false), 1000)
     
   } catch (err) {
     console.log(err)
@@ -32,7 +32,7 @@ export const HomeScreen = ({ username, image, caption }) => {
 
  useEffect(()=>{
     const fetchData = async ()=>{
-      await getRoutes();
+      await getHotels();
     };
     fetchData();
  }, [])
@@ -45,15 +45,15 @@ export const HomeScreen = ({ username, image, caption }) => {
     <View style={styles.body}>
       <ScrollView>
 
-      <Header></Header>
+    
       {
-        routes?.map(({_id, description, place}, index)=>{
+        hotel?.map(({_id, name,  description}, index)=>{
           return (
 
             <CardRoute
-            navigate={'RouteView'}
+            navigate ={'Rooms'}
             idRoute={_id}
-            placeName={place}
+            placeName={name}
             caption={description}
             ></CardRoute>
             

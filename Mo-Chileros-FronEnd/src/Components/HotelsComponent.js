@@ -7,12 +7,11 @@ import { Loading } from './Loading';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
-export const RouteComponentt = ({routeId, role}) => {
+export const HotelsComponent = ({ role}) => {
     const navigation = useNavigation();
     
     const imagePhoto = 'https://nuevomundo.gt/cms/img/articulos/antigua-guatemala-es-el-mejor-destino-de-centroamerica-para-visitar-114658-114841.jpg'
-    const [route, setRoute] = useState()
-    const [user, setUser] = useState()
+    const [hotel, setHotel] = useState()
     const [loading, setLoading] = useState(true)
     
     
@@ -31,22 +30,20 @@ export const RouteComponentt = ({routeId, role}) => {
                 'Authorization': token
                 }
 
-                let response = await axios.get(`http://${LOCAL_HOST}/route/getRouteModerator/${routeId}`, {headers});
-                console.log(response.data.route);
+                let response = await axios.get(`http://${LOCAL_HOST}/hotel/getHotelModerator`, {headers});
+                console.log(response.data.hotels);
                  //setear data
-                setRoute(response.data.route);
+                setHotel(response.data.hotels);
                 //esperar datos
                 setTimeout(()=> setLoading(false), 1000);
-            }else if(!role || role == 'MOCHILERO' || role == undefined || role == null ){
+            }else if(!role || role == 'MOCHILERO' ){
 
-              console.log('adentro');
-                let response = await axios.get(`http://${LOCAL_HOST}/route/getRoute/${routeId}`);
+                let response = await axios.get(`http://${LOCAL_HOST}/hotel/getHotelModerator`);
         
                 //setear data
-                setRoute(response.data.route);
+                setHotel(response.data.hotels);
                 //esperar datos
                 setTimeout(()=> setLoading(false), 1000);
-                alert(response.data.message)
             }
         } catch (err) {
             console.error(err);
@@ -73,10 +70,6 @@ export const RouteComponentt = ({routeId, role}) => {
       }
     };
 
-    const goTo = (routeId)=>{
-        navigation.navigate('CreateTravel', {route:routeId})
-    }
-
         useEffect(() => {
             getRoute();
         }, []);     
@@ -90,17 +83,11 @@ export const RouteComponentt = ({routeId, role}) => {
         
               {/* Detalles de la ruta */}
               <View style={styles.detailsContainer}>
-                <Text style={styles.name}>{route.name}</Text>
-                <Text style={styles.place}>{route.place}</Text>
-                <View style={styles.ratingContainer}>
-                  <Text style={styles.score}>{route.score}</Text>
-                  <Text style={styles.ratingText}>Puntuación</Text>
-                </View>
-                <Text style={styles.price}>Precio por noche: ${route.price}</Text>
-                <Text style={styles.capacity}>Capacidad: {route.capacityMembers} personas</Text>
-        
+                <Text style={styles.name}>{hotel.name}</Text>
+                <Text style={styles.place}>{hotel.state}</Text>
+               
                 <Text style={styles.descriptionTitle}>Descripción:</Text>
-                <Text style={styles.description}>{route.description}</Text>
+                <Text style={styles.description}>{hotel.description}</Text>
         
                 {/* Lista de actividades */}
                 {/* <View style={styles.activitiesContainer}>
@@ -111,7 +98,7 @@ export const RouteComponentt = ({routeId, role}) => {
                     </Text>
                   ))}
                 </View> */}
-                <Button onPress={()=>{goTo(routeId)}} title='press me'> </Button>
+                <Button title='press me'> </Button>
               </View>
             </ScrollView>
           );
