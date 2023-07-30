@@ -13,6 +13,7 @@ import { TestScreen } from '../screens/TestScreen';
 import theme from '../utils/userThem';
 import { AccountIndex } from '../screens/Account/AccountIndex';
 import { RegisterScreen } from '../screens/Account/RegisterScreen';
+import { CalendarTest } from '../Components/CalendarTest';
 
 const Tab = createBottomTabNavigator()
 // const Stack = createNativeStackNavigator();
@@ -64,7 +65,7 @@ export default MyTabs = () => {
     {/* {vista viaje actual} */}
     <Tab.Screen 
       name ='CurrentTravel'
-      component ={AccountIndex}
+      component ={CalendarTest}
       options={{
         tabBarInactiveTintColor: '#292262',
         tabBarActiveTintColor: 'green',

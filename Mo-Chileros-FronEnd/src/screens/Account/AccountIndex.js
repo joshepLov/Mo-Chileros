@@ -4,6 +4,7 @@ import { AuthContext } from '../../../App'
 import { ProfileComponent } from '../../Components/ProfileComponent'
 import LoginScreen from './LoginScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Loading } from '../../Components/Loading';
 
 export const AccountIndex = () => {
     const {loggedIn} = useContext(AuthContext)
@@ -27,7 +28,7 @@ export const AccountIndex = () => {
       <>
         {
           loggedIn == true ? (
-            idProfile !==null ? <ProfileComponent _id={idProfile} /> : <Text>Loading...</Text>
+            idProfile !==null ? <ProfileComponent _id={idProfile} /> : <Loading></Loading>
           ):(
            <LoginScreen/>
           )

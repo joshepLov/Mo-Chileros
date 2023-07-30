@@ -1,16 +1,18 @@
-import React, {useState, useEffect} from 'react';
-import { View, Image, Text, StyleSheet, ScrollView} from 'react-native';
+import React, {useState, useEffect, } from 'react';
+import { View, Image, Text, StyleSheet,  ScrollView, Button} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LOCAL_HOST } from '@env'
 import { Loading } from './Loading';
 import axios from 'axios';
-
+import { useNavigation } from '@react-navigation/native';
 
 export const RouteComponentt = ({routeId, role}) => {
+    const navigation = useNavigation();
     
     const imagePhoto = 'https://nuevomundo.gt/cms/img/articulos/antigua-guatemala-es-el-mejor-destino-de-centroamerica-para-visitar-114658-114841.jpg'
     const [route, setRoute] = useState()
+    const [user, setUser] = useState()
     const [loading, setLoading] = useState(true)
     
     
@@ -20,7 +22,7 @@ export const RouteComponentt = ({routeId, role}) => {
         try {
          
             //FUNCION PARA COMPROBAR SI ES AADMIN Y DEVOLVER DATA
-            if(role == 'ADMIN'|| role == 'MODERATOR'){
+            if(role == 'ADMIN'|| role == 'MODERADOR'){
 
                 //headers para listar y obtener permisos 
                 const token = await AsyncStorage.getItem('token')
@@ -29,8 +31,8 @@ export const RouteComponentt = ({routeId, role}) => {
                 'Authorization': token
                 }
 
-                let response = await axios.get(`http://${LOCAL_HOST}/route/getRouteModerator/${routeId}`, {headers:headers});
-        
+                let response = await axios.get(`http://${LOCAL_HOST}/route/getRouteModerator/${routeId}`, {headers});
+                console.log(response.data.route);
                  //setear data
                 setRoute(response.data.route);
                 //esperar datos
@@ -48,6 +50,30 @@ export const RouteComponentt = ({routeId, role}) => {
             console.error(err);
         }
         };
+
+        //funcion para obtener Usuario
+  const getUser = async () => {
+    try {
+        //headers para listar y obtener permisos 
+        const token = await AsyncStorage.getItem('token')
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        }
+       let response = await axios.get(`${REACT_APP_LOCAL_HOST}/user/get/${_id}`, {headers:headers});
+      
+       //setear data
+        setUser(response.data.user);
+        //esperar datos
+        setTimeout(()=> setloading(false), 1000);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const goTo = (routeId)=>{
+        navigation.navigate('CreateTravel', {travelid:routeId})
+    }
 
         useEffect(() => {
             getRoute();
@@ -83,6 +109,7 @@ export const RouteComponentt = ({routeId, role}) => {
                     </Text>
                   ))}
                 </View> */}
+                <Button onPress={()=>{goTo(routeId)}} title='press me'> </Button>
               </View>
             </ScrollView>
           );

@@ -5,6 +5,7 @@ import { HomeScreen } from '../screens/HomeScreen'
 import Navigation from './Navigation'
 import { RegisterScreen } from '../screens/Account/RegisterScreen'
 import { Route } from '../screens/route/Route'
+import { CreateTravel } from '../screens/Travel/CreateTravel'
 
 const Stack = createStackNavigator()
 
@@ -33,6 +34,9 @@ export const AuthNavigation = () => {
     component={Route}
     />
 
+    <Stack.Screen
+    name='CreateTravel'
+    component={CreateTravel}/>
 
 
     </Stack.Navigator> 

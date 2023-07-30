@@ -22,12 +22,15 @@ exports.createTravel = async (req, res) => {
       const dateNow = new Date()
       const startDate = new Date(data.dateStart)
       const endDate = new Date(data.dateEnd)
+      console.log(data);
+      console.log(routeId);
 
       //datos obligatorios
       let params = {
         dateStart: data.dateStart,
         dateEnd: data.dateEnd
       };
+
 
       //parametros no permitidos
       let paramsDenied = {
@@ -54,7 +57,13 @@ exports.createTravel = async (req, res) => {
       
       // validacion de parametros obligatorios
       let validateParams = validateData(params);
-      if (validateParams) return res.status(403).send(validateParams);
+      if (validateParams){
+
+        console.log(validateParams);
+        return (
+          res.status(403).send(validateParams)
+          )
+        }
         
       //validacion de fechas seleccionadas 
       if(startDate < dateNow|| endDate < dateNow) return res.status(403).send(

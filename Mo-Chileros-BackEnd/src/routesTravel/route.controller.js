@@ -104,5 +104,24 @@ exports.getRoutesModereator = async (req,res) =>{
 }
 
 
+//Obtener Ruta
+exports.getRouteModerator = async (req,res) =>{
+    try {
+        let idroute = req.params.id; 
+
+        
+        // find route 
+        let route = await Route.findOne({_id:idroute})
+        //sino existe 
+        if(!route) return res.send ({ message:'doesnt exist route, create One!'})
+
+        return res.send ({route})
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({message: 'Server Error, try later'})
+        
+    }
+}
+
 
 

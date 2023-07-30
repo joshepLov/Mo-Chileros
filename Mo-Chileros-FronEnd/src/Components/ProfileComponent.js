@@ -6,6 +6,7 @@ import axios from 'axios'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { useNavigation } from '@react-navigation/native';
 import {LOCAL_HOST} from '@env'
+import { Loading } from './Loading';
 
 export const ProfileComponent = ({_id}) => {
 
@@ -55,7 +56,7 @@ export const ProfileComponent = ({_id}) => {
   }, [])
 
   // esperar datos
-  if (loading) return <Text style={styles.body}>loading...</Text>;
+  if (loading) return <Loading></Loading>;
 
   return (
     <View className='bg-white'>
