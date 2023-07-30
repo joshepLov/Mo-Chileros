@@ -3,31 +3,33 @@
 const mongoose = require('mongoose')
 const reservationHotelSchema = mongoose.Schema({
 
-  travel:{
-    type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Travel'
+  travel: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Travel'
   },
   hotel: {
-    type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Hotel'
-  },
-  room:{
     type: mongoose.Schema.Types.ObjectId,
-        ref: 'Hotel.room'
-  }, 
-  user:{
-    type: mongoose.Schema.Types.ObjectId, 
-      ref: 'User'
+    ref: 'Hotel'
   },
-  dates:[{
+  room: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Hotel.room'
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  dateStart:{
+    type: Date,
 
-    date: {type: Date}
   },
-],
-  price:{
+  dateFinal:{
+    type: Date,
+  },
+  price: {
     type: Number
   }
 
-}) 
+})
 
 module.exports = mongoose.model('ReservationHotel', reservationHotelSchema);

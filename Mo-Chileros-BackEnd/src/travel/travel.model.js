@@ -3,75 +3,89 @@
 const mongoose = require('mongoose')
 
 const travelSchema = mongoose.Schema({
-    route:{
-        type : mongoose.Schema.Types.ObjectId, 
-            ref: 'Route'
+    route: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Route'
     },
-    place:{
+    place: {
         type: String
     },
-    state:{
+    state: {
         type: String
     },
-    capacity:{
-        type:Number
+    capacity: {
+        type: Number
     },
     cordinator: {
-        type: mongoose.Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    members: [{
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
-    },
-    members:[{
-        user:{
-            type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
         },
-        nameUser:{
+        nameUser: {
             type: String
-        }
-    }], 
-    activities:[{
-        name:{
-            type: String
-        }, 
-        day:{
-            type: String
-        }, 
-        hourStart:{
-            type: Number
-        },
-        hourEnd:{
-            type: Number
-        }, 
-        status:{
-            type: Number
-        }
-    }], 
-    dateStart:{
-        type: Date
-    },
-    dateEnd:{
-        type: Date
-    }, 
-    price:{
-        type: Number
-    },
-    reservations:[{
-        hotel:{
-            type: mongoose.Schema.Types.ObjectId,
-                ref:'ReservationHotel'
-        }, 
-        transport:{
-            type: mongoose.Schema.Types.ObjectId, 
-                ref:'ReservationTransport'
         }
     }],
-    status:{
+    activities: [{
+        name: {
+            type: String
+        },
+        day: {
+            type: String
+        },
+        hourStart: {
+            type: Number
+        },
+        hourEnd: {
+            type: Number
+        },
+        status: {
+            type: Number
+        }
+    }],
+    dateStart: {
+        type: Date
+    },
+    dateEnd: {
+        type: Date
+    },
+    price: {
+        type: Number
+    },
+    reservations: [{
+        hotel: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'ReservationHotel'
+        },
+        transport: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'ReservationTransport'
+        }
+    }],
+    status: {
         type: Boolean
     },
-    travelStatus:{
+    travelStatus: {
         type: Number
-    }
+    },
+    imagen: [
+        {
+            image: {
+                type: String
+            },
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            description: {
+                type: String
+            }
+        }
+    ]
 
-}) 
+})
 
 module.exports = mongoose.model('Travel', travelSchema);
