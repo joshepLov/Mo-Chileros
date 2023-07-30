@@ -33,3 +33,8 @@ api.get('/getTransport/:id',[ensureAuth, isMochilero] ,transportController.getTr
 api.put('/uploadImage/:id',upload, transportController.addImage);
 api.get('/getImage/:fileName',upload, transportController.getImage);
 module.exports = api
+
+//image
+api.put('/uploadImage/:id',upload, transportController.addImage);
+api.get('/getImage/:fileName',upload, transportController.getImage);
+module.exports = api

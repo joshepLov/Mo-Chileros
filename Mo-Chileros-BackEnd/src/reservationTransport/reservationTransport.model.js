@@ -1,23 +1,29 @@
 'use strict'
 
 const mongoose = require('mongoose')
-const reservationTransportSchema= mongoose.Schema({
+const reservationTransportSchema = mongoose.Schema({
 
-  travel:{
-    type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Travel'
+  travel: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Travel'
   },
-  transpor: {
-    type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Transport'
-  }, 
-  date:{
+  transport: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Transport'
+  },
+  /* date: {
     type: Date
-},
-  price:{
+  }, */
+  dateStart: {
+    type: Date
+  },
+  dateFinal: {
+    type: Date
+  },
+  price: {
     type: Number
   }
 
-}) 
+})
 
-modeule.exports = mongoose.model('reservationTransport', reservationTransportSchema);
+module.exports = mongoose.model('reservationTransport', reservationTransportSchema);
