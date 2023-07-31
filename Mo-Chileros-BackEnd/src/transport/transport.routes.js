@@ -25,8 +25,8 @@ api.put('/activateTransport/:id',[ensureAuth,isModerator], transportController.a
 
 //rutas publicas 
 
-api.get('/getTransports',[ensureAuth,isMochilero],transportController.getTransportsMochileros)
-api.get('/getTransport/:id',[ensureAuth, isMochilero] ,transportController.getTransportMochileros)
+api.get('/getTransports',[ensureAuth,],transportController.getTransportsMochileros)
+api.get('/getTransport/:id',[ensureAuth, ] ,transportController.getTransportMochileros)
 
 
 //image

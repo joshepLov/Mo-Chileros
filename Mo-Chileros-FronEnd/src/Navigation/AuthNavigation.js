@@ -20,6 +20,7 @@ import { BlankHotel } from '../screens/Hotel/BlankHotel'
 import { CreateHotel } from '../screens/Hotel/CreateHotel'
 import { CreateRoom } from '../screens/Room/CreateRoom'
 import { CreateTransport } from '../screens/Transport/CreateTransport'
+import { BlankTransport } from '../screens/Transport/BlankTransport'
 
 const Stack = createStackNavigator()
 
@@ -109,6 +110,9 @@ export const AuthNavigation = () => {
     name='CreateTransport'
     component={CreateTransport}/>
     
+    <Stack.Screen
+    name='BlankTransport'
+    component={BlankTransport}/>
 
     </Stack.Navigator> 
   )

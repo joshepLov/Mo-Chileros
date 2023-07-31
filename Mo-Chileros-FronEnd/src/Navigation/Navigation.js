@@ -19,6 +19,7 @@ import { Hotel } from '../screens/Hotel/Hotel';
 import { Transport } from '../screens/Transport/Transport';
 import { GetTravel } from '../screens/Travel/GetTravell';
 import { CardRoute } from '../Components/CardRoute';
+import { BlankTransport } from '../screens/Transport/BlankTransport';
 
 const Tab = createBottomTabNavigator()
 // const Stack = createNativeStackNavigator();
@@ -77,7 +78,7 @@ export default MyTabs = () => {
       <>
        <Tab.Screen 
         name ='f'
-        component ={Transport}
+        component ={BlankTransport}
          options={{
           tabBarInactiveTintColor: '#292262',
           tabBarActiveTintColor: 'green',

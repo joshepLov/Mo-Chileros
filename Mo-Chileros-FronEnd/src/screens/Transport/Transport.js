@@ -5,17 +5,15 @@ import axios from 'axios';
 import {LOCAL_HOST} from '@env'
 import { Loading } from '../../Components/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRoute } from '@react-navigation/native';
 import { AuthContext } from '../../../App';
 
-export const Transport = () => {
+export const Transport = ({idtravel}) => {
   const { dataUser } = useContext(AuthContext)
   //para esperar datos
   const [loading, setLoading] = useState(true)
   //ruta
   const [transporte, setTransporte] = useState([{}])
-  const routeParams = useRoute();
-  const {idTravel} = routeParams.params;
+
 
 //funcion obtener rutas
  const getTransport = async() =>{
@@ -55,8 +53,7 @@ export const Transport = () => {
   return (  
     <View style={styles.body}>
       <ScrollView>
-    {
-      idTravel?(
+   
         <>
         {
           transporte?.map(({_id, name,  description, image}, index)=>{
@@ -66,7 +63,7 @@ export const Transport = () => {
               key={index}
               image={null}
               navigate ={'TransportReservation'}
-              idtravel={idTravel}
+              idtravel={idtravel}
               idRoute={_id}
               placeName={name}
               caption={description}
@@ -80,7 +77,7 @@ export const Transport = () => {
                 schema={'transport'}
                 schemaroute={'getImage'}
                 navigate ={'TransportReservation'}
-                idtravel={idTravel}
+                idtravel={idtravel}
                 idRoute={_id}
                 placeName={name}
                 caption={description}
@@ -90,7 +87,7 @@ export const Transport = () => {
             })
           }
           </>
-      ):(
+     
        <>
         {
           dataUser.role == 'ADMIN' || dataUser.role == 'MODERADOR' ?(
@@ -154,8 +151,8 @@ export const Transport = () => {
           
           }
           </> 
-          )
-    }
+          
+    
     
       </ScrollView>
   </View>

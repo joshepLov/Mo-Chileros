@@ -55,7 +55,7 @@ export const RoomReservation = () => {
    
       //validate message
         alert(data.message)
-        navigation.navigate('Transport', {idTravel:travel})
+        navigation.navigate('BlankTransport', {idTravel:travel})
         
       
     } catch (e) {
