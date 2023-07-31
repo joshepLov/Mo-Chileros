@@ -360,9 +360,7 @@ exports.addImage = async(req, res)=>{
           return res.send({message: 'User updated', updateUserImage})
       }
       fs.unlinkSync(filePath)
-      return (
-        console.log('aca esta el error en el filepath'),
-        res.status(404).send({message: 'File extension cannot admited'}))
+      return res.status(404).send({message: 'File extension cannot admited'});
 
 
   }catch(err){
