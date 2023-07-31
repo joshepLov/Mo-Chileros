@@ -27,6 +27,7 @@ exports.createTransport = async (req, res) => {
       capacity: data.price,
       typeVehicle: data.typeVehicle
     };
+    console.log(data);
 
     // validacion de datos
     let validateParams = validateData(params);

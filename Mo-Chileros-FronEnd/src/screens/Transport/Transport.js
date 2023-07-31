@@ -6,6 +6,7 @@ import {LOCAL_HOST} from '@env'
 import { Loading } from '../../Components/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../../App';
+import { FloatingButtom } from '../../Components/FloatingButtom';
 
 export const Transport = ({idtravel}) => {
   const { dataUser } = useContext(AuthContext)
@@ -18,6 +19,23 @@ export const Transport = ({idtravel}) => {
 //funcion obtener rutas
  const getTransport = async() =>{
   try {
+
+    if(dataUser.role == 'ADMIN'|| dataUser.role == 'MODERADOR'  ){
+      console.log('admin funcion');
+       //headers para listar y obtener permisos 
+       const token = await AsyncStorage.getItem('token')
+       const headers = {
+       'Content-Type': 'application/json',
+       'Authorization': token
+       }
+     let response = await axios.get(`http://192.168.1.9:3418/transport/getTransportsModerator`, {headers:headers})
+     let data = response.data
+     console.log(data.tranposrts, 'sirve la data?');
+     setTransporte(data.tranposrts)
+     console.log(transporte, 'SI SIRVE');
+ 
+     setTimeout(()=> setLoading(false), 1000)
+    }else {
       //headers para listar y obtener permisos 
       const token = await AsyncStorage.getItem('token')
       const headers = {
@@ -25,12 +43,13 @@ export const Transport = ({idtravel}) => {
       'Authorization': token
       }
     let response = await axios.get(`http://192.168.1.9:3418/transport/getTransports`, {headers:headers})
+      console.log('esto no es admin');
     let data = response.data
-    console.log(data);
-    setTransporte(response.data.transport)
+    console.log(data.tranposrts);
+    setTransporte(response.data.tranposrts)
     console.log(transporte);
 
-    setTimeout(()=> setLoading(false), 1000)
+    setTimeout(()=> setLoading(false), 1000)}
     
   } catch (err) {
     console.log(err)
@@ -54,45 +73,11 @@ export const Transport = ({idtravel}) => {
     <View style={styles.body}>
       <ScrollView>
    
-        <>
-        {
-          transporte?.map(({_id, name,  description, image}, index)=>{
-            if(image==null)
-           { return (
-              <CardRoute
-              key={index}
-              image={null}
-              navigate ={'TransportReservation'}
-              idtravel={idtravel}
-              idRoute={_id}
-              placeName={name}
-              caption={description}
-              ></CardRoute>
-              
-              )}
-              else{
-                <CardRoute
-                key={index}
-                image={image}
-                schema={'transport'}
-                schemaroute={'getImage'}
-                navigate ={'TransportReservation'}
-                idtravel={idtravel}
-                idRoute={_id}
-                placeName={name}
-                caption={description}
-                ></CardRoute>
-                
-              }
-            })
-          }
-          </>
-     
-       <>
+        
         {
           dataUser.role == 'ADMIN' || dataUser.role == 'MODERADOR' ?(
             transporte?.map(({_id, name,  description, image}, index)=>{
-            
+            console.log('admin');
               if(image== null)
               {return (
     
@@ -107,22 +92,22 @@ export const Transport = ({idtravel}) => {
                 
                 )}
                 else{
+                  return(
                   <CardRoute
                   key={index}
                   image={image}
                   schema={'transport'}
                   schemaroute={'getImage'}
-                  
                   navigate ={'CreateTransport'}
                   idRoute={_id}
                   placeName={name}
                   caption={description}
-                  ></CardRoute>
+                  ></CardRoute>)
                 }
               })
-          ):(
+          ): dataUser.role != 'ADMIN' || dataUser.role != 'MODERADOR' ?(
             transporte?.map(({_id, name,  description, image}, index)=>{
-            
+            console.log('no admin');
               if(image== null)
               {return (
     
@@ -136,7 +121,7 @@ export const Transport = ({idtravel}) => {
                 
                 )}
                 else{
-                  <CardRoute
+                  return  ( <CardRoute
                   key={index}
                   image={image}
                   schema={'transport'}
@@ -144,17 +129,58 @@ export const Transport = ({idtravel}) => {
                   idRoute={_id}
                   placeName={name}
                   caption={description}
-                  ></CardRoute>
+                  ></CardRoute>)
                 }
               })
-          )
+          ):(
+              transporte?.map(({_id, name,  description, image}, index)=>{
+            if(image==null){
+               return (
+              <CardRoute
+              key={index}
+              image={null}
+              navigate ={'TransportReservation'}
+              idtravel={idtravel}
+              idRoute={_id}
+              placeName={name}
+              caption={description}
+              ></CardRoute>
+              
+              )
+            } else{
+                return(
+
+                  <CardRoute
+                  key={index}
+                  image={image}
+                  schema={'transport'}
+                  schemaroute={'getImage'}
+                  navigate ={'TransportReservation'}
+                  idtravel={idtravel}
+                  idRoute={_id}
+                  placeName={name}
+                  caption={description}
+                  ></CardRoute>
+                  
+                  )
+                }
+              })
           
+          )
           }
-          </> 
+          
+     
+           
           
     
     
       </ScrollView>
+      {dataUser.role == 'ADMIN' || dataUser.role == 'MODERADOR'?(
+        <FloatingButtom nav={'CreateTransport'}></FloatingButtom>
+        ):(
+          <></>
+          
+        )}
   </View>
 )
 }

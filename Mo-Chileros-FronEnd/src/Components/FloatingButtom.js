@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { FloatingAction } from 'react-native-floating-action';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { CreateTransport } from '../screens/Transport/CreateTransport';
 
 export const FloatingButtom = ({nav, id}) => {
 
@@ -84,21 +85,27 @@ export const FloatingButtom = ({nav, id}) => {
               <FloatingAction
               actions={actionshotel}
               onPressItem={newRoute}
-              color="orange" // Color de fondo del botón flotante (amarillo)
+              color="orange" 
               />
               
               ):nav=='CreateRoom' ?(    
                 <FloatingAction
                 actions={actionroom}
                 onPressItem={newRoute}
-                color="orange" // Color de fondo del botón flotante (amarillo)
+                color="orange" 
               />
             
+          ):nav == 'CreateTransport'?(
+            <FloatingAction
+            actions={actionTransport}
+            onPressItem={newRoute}
+            color="orange" 
+          />
           ):(
             <FloatingAction
             actions={actions}
             onPressItem={newRoute}
-            color="orange" // Color de fondo del botón flotante (amarillo)
+            color="orange" 
           />
           )
           }

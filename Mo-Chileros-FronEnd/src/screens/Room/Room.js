@@ -13,12 +13,13 @@ export const Room = ({id, idtravel}) => {
     const routeParams = useRoute();
     const {routeId} = routeParams.params;
     const {travel} = routeParams.params;
+    console.log(idtravel, 'esto es el travel?');
   //para esperar datos
   const [loading, setLoading] = useState(true)
   //ruta
   const [room, setRoom] = useState([{}])
 
-console.log(routeId);
+console.log(id);
 //funcion obtener rutas
  const getTransport = async() =>{
   try {
@@ -61,6 +62,7 @@ console.log(routeId);
             return (
 
               <CardRoute
+              key={index}
               image={null}
               schema={'hotel'}
               schemaroute={'getImageRoom'}
@@ -77,11 +79,12 @@ console.log(routeId);
             return (
 
               <CardRoute
+              key={index}
               image={image}
               schema={'hotel'}
               schemaroute={'getImageRoom'}
               navigate ={'RoomReservation'}
-              idtravel={travel}
+              idtravel={tr}
               hotelId={routeId}
               idRoute={_id}
               placeName={name}
@@ -95,7 +98,7 @@ console.log(routeId);
       }
       </ScrollView>
       {dataUser.role == 'ADMIN' || dataUser.role == 'MODERADOR'?(
-        <FloatingButtom id={routeId} nav={'CreateRoom'}></FloatingButtom>
+        <FloatingButtom id={id} nav={'CreateRoom'}></FloatingButtom>
         ):(
           <></>
           

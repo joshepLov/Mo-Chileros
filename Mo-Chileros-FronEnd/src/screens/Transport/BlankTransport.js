@@ -7,7 +7,7 @@ import { Transport } from './Transport';
 export const BlankTransport = () => {
 
     const routeParams = useRoute();
-    const {routeId}= routeParams.params;
+    const {routeId}= routeParams?.params;
     const {idTravel}= routeParams.params;
   return (
       <>
@@ -16,11 +16,11 @@ export const BlankTransport = () => {
             <Transport idtravel={idTravel}>
             </Transport>
 
-):routeId?(<ImageRoute
-nav={'CreateTransport'}
-routeId={routeId}
-schema={'transport'}
-routeschema={'uploadImage'}
+    ):routeId?(<ImageRoute
+    nav={'CreateTransport'}
+    routeId={routeId}
+    schema={'transport'}
+    routeschema={'uploadImage'}
 >
 
 </ImageRoute>):(<Transport></Transport>)

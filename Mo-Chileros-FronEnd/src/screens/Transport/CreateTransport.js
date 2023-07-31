@@ -43,14 +43,14 @@ export const CreateTransport = () => {
            'Authorization': token
          }
    
-        const response = await axios.put(`http://${LOCAL_HOST}/transport/createTransport`, transport, {headers});
+        const response = await axios.post(`http://${LOCAL_HOST}/transport/createTransport`, (transport), {headers});
         // save data
         let data = response.data;
          let id = data.transport._id
         //validate register
         if (data.transport) {
           //change screen ingo user 
-          navigation.navigate('Transport' )
+          navigation.navigate('BlankTransport' ,{routeId: id} )
         } else {
           alert('ocurrio un error en el registro, porfavor verifica tus datos')
         }

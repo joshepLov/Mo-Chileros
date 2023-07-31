@@ -31,6 +31,8 @@ export const Hotel = ({id}) => {
             }
       let response = await axios.get(`http://192.168.1.9:3418/hotel/getHotelsModerator`, {headers:headers})
       let data = response.data
+      console.log(data);
+      console.log(response.data.hotels);
  
       setHotel(response.data.hotels)
    
@@ -52,6 +54,7 @@ export const Hotel = ({id}) => {
   }
 
  }
+ console.log(id, 'id travel');
 
 //  const routeParams = useRoute();
 //  const {idTravel}= routeParams.params;
@@ -80,6 +83,7 @@ export const Hotel = ({id}) => {
           if(image == undefined){
             return (
               <CardRoute
+              key={index}
               iconDesign={'hotel'}
               image={null}
               schema={'hotel'}
@@ -97,6 +101,7 @@ export const Hotel = ({id}) => {
           }else{
             return (
               <CardRoute
+              key={index}
               iconDesign={'hotel'}
               image={image}
               schema={'hotel'}
@@ -117,11 +122,13 @@ export const Hotel = ({id}) => {
               if (image == null) {
                 return (
                   <CardRoute
+                  key={index}
                   iconDesign={'hotel'}
                   image={null}
                   schema={'hotel'}
                   schemaroute={'getImage'}
                   navigate ={'Rooms'}
+                  idtravel={id}
                   idRoute={_id}
                   placeName={name}
                   caption={description}
@@ -132,12 +139,14 @@ export const Hotel = ({id}) => {
 
                 return (
                   <CardRoute
+                  key={index}
                 iconDesign={'hotel'}
                 image={image}
                 schema={'hotel'}
                 schemaroute={'getImage'}
                 navigate ={'Rooms'}
                 idRoute={_id}
+                idtravel={id}
                 placeName={name}
                 caption={description}
                 ></CardRoute>

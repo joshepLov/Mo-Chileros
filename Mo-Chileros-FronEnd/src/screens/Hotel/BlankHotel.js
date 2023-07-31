@@ -9,6 +9,7 @@ export const BlankHotel = () => {
     const {routeId}= routeParams.params;
     const {idTravel}= routeParams.params;
     console.log(routeId);
+    console.log(idTravel, 'ESTE ES EL VIAJE');
   return (
     <>
     {routeId ? (

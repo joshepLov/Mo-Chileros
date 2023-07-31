@@ -24,14 +24,16 @@ const [loading, setLoading] = useState(true)
   return (
   <>
   {
-    rol == null ? (
+    rol == 'ADMIN' || rol =='MODERADOR' ? (
       <RouteComponentt
       routeId ={routeId}
-      />
+      role={rol}/>
+    
     ):(
-    <RouteComponentt
-    routeId ={routeId}
-    role={rol}/>
+      <RouteComponentt
+      routeId ={routeId}
+      role={''}
+      />
     )
   }
   

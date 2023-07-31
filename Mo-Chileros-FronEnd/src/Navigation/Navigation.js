@@ -78,7 +78,7 @@ export default MyTabs = () => {
       <>
        <Tab.Screen 
         name ='f'
-        component ={BlankTransport}
+        component ={Transport}
          options={{
           tabBarInactiveTintColor: '#292262',
           tabBarActiveTintColor: 'green',

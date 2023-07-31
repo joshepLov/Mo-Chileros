@@ -10,12 +10,13 @@ import { useNavigation } from '@react-navigation/native';
 export const RouteComponentt = ({routeId, role}) => {
     const navigation = useNavigation();
     
-    const imagePhoto = 'https://nuevomundo.gt/cms/img/articulos/antigua-guatemala-es-el-mejor-destino-de-centroamerica-para-visitar-114658-114841.jpg'
+    const imagePhoto = '../../assets/logo-color.png'
     const [route, setRoute] = useState()
     const [user, setUser] = useState()
     const [loading, setLoading] = useState(true)
     
-    
+    //  const routeParams = useRoute();
+//  const {idTravel}= routeParams.params;
     
     //funcion para obtener Ruta
     const getRoute = async () => {
@@ -37,16 +38,18 @@ export const RouteComponentt = ({routeId, role}) => {
                 setRoute(response.data.route);
                 //esperar datos
                 setTimeout(()=> setLoading(false), 1000);
-            }else if(!role || role == 'MOCHILERO' || role == undefined || role == null ){
+            }else if(role== undefined|| role==''){
 
-              console.log('adentro');
+              console.log(routeId);
                 let response = await axios.get(`http://${LOCAL_HOST}/route/getRoute/${routeId}`);
-        
-                //setear data
+                let data = response.data
                 setRoute(response.data.route);
+                console.log(route);
+                // console.log(response.data.route);
+                //setear data
+                // console.log(route, 'no quiere');
                 //esperar datos
                 setTimeout(()=> setLoading(false), 1000);
-                alert(response.data.message)
             }
         } catch (err) {
             console.error(err);
@@ -78,7 +81,10 @@ export const RouteComponentt = ({routeId, role}) => {
     }
 
         useEffect(() => {
-            getRoute();
+          const fetchData = async ()=>{
+            await getRoute();
+          };
+          fetchData();
         }, []);     
 
         if(loading) return(<Loading/>)

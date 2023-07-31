@@ -71,11 +71,11 @@ exports.getRoutesMochilero = async (req,res) =>{
 
 exports.getRouteMochilero = async (req, res) => {
     try {
-
+        let idroute = req.params.id; 
         // find route 
-        let route = await Route.find({ status: true }).select('-_id -status')
+        let route = await Route.find({_id:idroute ,status: true }).select(' -status')
         //sino existe 
-        if (!route || route.lenght == 0) return res.send({ message: 'doesnt exist route, create One!' })
+        if (!route) return res.send({ message: 'doesnt exist route, create One!' })
 
         return res.send({route })
     } catch (err) {

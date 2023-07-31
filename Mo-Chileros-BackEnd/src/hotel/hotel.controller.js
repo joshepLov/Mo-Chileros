@@ -119,7 +119,7 @@ exports.getHotelMochileros = async (req, res) => {
     let data = req.params.id;
 
     //buscar datos
-    let hotel = await Hotel.findOne({ _id: data, status: true }).select("-_id -status");
+    let hotel = await Hotel.findOne({ _id: data, status: true }).select(" -status");
 
     //validar datos
       if (!hotel)
