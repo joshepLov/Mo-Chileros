@@ -7,7 +7,7 @@ const PLACEHOLDER_IMAGE_URL =
   'https://media.traveler.es/photos/61377d2370e3cff8b85f9d8b/16:9/w_1200,h_675,c_limit/28469.jpg';
 
 
-export const CardRoute = ({ photo, placeName, caption, ky, idRoute, navigate}) => {
+export const CardRoute = ({ photo, placeName, caption, ky, idRoute,idtravel, hotelId, navigate}) => {
    
   const navigation = useNavigation();
   const [expanded, setExpanded] = useState(false);
@@ -19,10 +19,26 @@ export const CardRoute = ({ photo, placeName, caption, ky, idRoute, navigate}) =
 
  
     const goToRoute = (idRoute)=>{
-      if (navigate == 'Rooms'  || navigate == 'RouteView') {
+      if (navigate == 'Rooms' ) {
+        navigation.navigate(navigate, {routeId:idRoute, travel:idtravel})
+
+        
+      } else if( navigate == 'RouteView' ) {
         navigation.navigate(navigate, {routeId:idRoute })
         
-      } else {
+      }else if(navigate =='RoomReservation'){
+        //route es id room y room es room es el hotel
+        navigation.navigate(navigate, {routeId:idRoute, travel:idtravel, hotel: hotelId})
+
+        
+      }else if(navigate =='TransportReservation'){
+        //route es id room y room es room es el hotel
+        navigation.navigate(navigate, {routeId:idRoute, travel:idtravel, })
+
+        
+      } 
+      
+      else {
         navigation.navigate(navigate)
         
       }

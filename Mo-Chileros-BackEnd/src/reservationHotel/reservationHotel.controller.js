@@ -154,25 +154,32 @@ exports.reservacion = async (req, res) => {
     let data = req.body
 
     //Buscar el transporte
-    let { price } = await TransportReservation.findOne({ travel: idTravel })
+    let priceTravel  = await TransportReservation.findOne({ travel: idTravel })
 
 
     //Verificar que exista el viaje y este agregado como un miembro
     let existTrabel = await Travel.findOne({ _id: idTravel, 'members.user': user.sub })
-    if (!existTrabel) return req.status(403).send({ message: 'please check your credentials' })
+    if (!existTrabel) {
+      console.log('travel error');
+    return req.status(403).send({ message: 'please check your credentials' })}
 
     //Verificar que el hotel a reservar exista y la habitacion
     let existHotel = await Hotel.findOne({ _id: idHotel, 'room._id': idRoom }, { 'room.$': 1 })
-    if (!existHotel) return res.status(409).send({ message: "Hotel doesnt found exist" });
+    if (!existHotel){ 
+      console.log('hotel');
+      return res.status(409).send({ message: "Hotel doesnt found exist" });}
 
     //Fechas de la reservacion
     const dateNow = new Date()
-    const startDate = new Date(data.dateStart)
-    const endDate = new Date(data.dateFinal)
+    const startDate = existTrabel.dateStart
+    const endDate = existTrabel.dateEnd
 
-    //Las fechas de reservacion deven de ser igual a las fechas en las que iniciara y terminara el viaje
-    if (Date.parse(startDate) !== Date.parse(existTrabel.dateStart) || Date.parse(endDate) !== Date.parse(existTrabel.dateEnd))
-      return res.status(418).send({ message: 'Las fechas de reservacion deven de ser iguales a las del viaje' })
+    // //Las fechas de reservacion deven de ser igual a las fechas en las que iniciara y terminara el viaje  endDate,existTrabel.dateEnd
+    // if (startDate ==! existTrabel.dateStart ){
+    //   console.log(startDate, existTrabel.dateStart)
+    //   console.log('iguales');
+    //   return res.status(418).send({ message: 'Las fechas de reservacion deven de ser iguales a las del viaje' })
+    // }
 
 
     //La fecha final no puede ser menor a la inicial
@@ -192,7 +199,11 @@ exports.reservacion = async (req, res) => {
     data.user = user.sub
     data.dateStart = startDate
     data.dateFinal = endDate
-    data.price = existHotel.room[0].price
+
+    if(priceTravel){
+      price= priceTravel.price
+      data.price = existHotel.room[0].price
+    }
     console.log(existHotel)
 
     //Verificar si existe una factura

@@ -5,13 +5,16 @@ import axios from 'axios';
 import {LOCAL_HOST} from '@env'
 import { Loading } from '../../Components/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRoute } from '@react-navigation/native';
 
 export const Transport = () => {
   //para esperar datos
   const [loading, setLoading] = useState(true)
   //ruta
   const [transporte, setTransporte] = useState([{}])
-
+  const routeParams = useRoute();
+  const {idTravel} = routeParams.params;
+  console.log(idTravel);
 
 //funcion obtener rutas
  const getTransport = async() =>{
@@ -58,7 +61,8 @@ export const Transport = () => {
           return (
 
             <CardRoute
-            navigate ={'HotelView'}
+            navigate ={'TransportReservation'}
+            idtravel={idTravel}
             idRoute={_id}
             placeName={name}
             caption={description}

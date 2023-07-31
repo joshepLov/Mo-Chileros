@@ -7,7 +7,7 @@ const transportReservationController = require('./reservationTransport.controlle
 const { ensureAuth } = require('../services/authenticated')
 
 api.get('/test', transportReservationController.test)
-api.post('/createReservation/:idTravel/:idTransport', ensureAuth, transportReservationController.createReservation)
+api.post('/createReservation/:idTravel/:idTransport',[ ensureAuth], transportReservationController.createReservation)
 api.get('/getReservations', transportReservationController.getReservations)
 api.get('/getReservation/:id', transportReservationController.getReservation)
 api.delete('/cancelReservation/:id/:idTravel', ensureAuth,transportReservationController.cancelReservation)

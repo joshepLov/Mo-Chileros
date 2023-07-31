@@ -4,6 +4,7 @@ import { CardRoute } from '../../Components/CardRoute'
 import axios from 'axios';
 import {LOCAL_HOST} from '@env'
 import { Loading } from '../../Components/Loading';
+import { useRoute } from '@react-navigation/native';
 
 export const Hotel = ({ username, image, caption }) => {
   //para esperar datos
@@ -30,6 +31,10 @@ export const Hotel = ({ username, image, caption }) => {
 
  }
 
+ const routeParams = useRoute();
+ const {idTravel}= routeParams.params;
+
+
  useEffect(()=>{
     const fetchData = async ()=>{
       await getHotels();
@@ -44,7 +49,6 @@ export const Hotel = ({ username, image, caption }) => {
   return (  
     <View style={styles.body}>
       <ScrollView>
-
     
       {
         hotel?.map(({_id, name,  description}, index)=>{
@@ -53,6 +57,7 @@ export const Hotel = ({ username, image, caption }) => {
             <CardRoute
             navigate ={'Rooms'}
             idRoute={_id}
+            idtravel={idTravel}
             placeName={name}
             caption={description}
             ></CardRoute>

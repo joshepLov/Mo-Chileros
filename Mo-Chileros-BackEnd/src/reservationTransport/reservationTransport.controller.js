@@ -32,12 +32,12 @@ exports.createReservation = async (req, res) => {
 
         //Fechas de la reservacion
         const dateNow = new Date()
-        const startDate = new Date(data.dateStart)
-        const endDate = new Date(data.dateFinal)
+        const startDate = travel.dateStart
+        const endDate = travel.dateEnd
 
         //Las fechas de reservacion deven de ser igual a las fechas en las que iniciara y terminara el viaje
-        if (Date.parse(startDate) !== Date.parse(travel.dateStart) || Date.parse(endDate) !== Date.parse(travel.dateEnd))
-            return res.status(418).send({ message: 'Las fechas de reservacion deven de ser iguales a las del viaje' })
+        // if (Date.parse(startDate) !== Date.parse(travel.dateStart) || Date.parse(endDate) !== Date.parse(travel.dateEnd))
+        //     return res.status(418).send({ message: 'Las fechas de reservacion deven de ser iguales a las del viaje' })
 
         //La fecha final no puede ser menor a la inicial
         if (endDate < startDate) return res.status(418).send({ message: 'La fecha final deve ser igual o mayor a la inicial' })
@@ -45,8 +45,8 @@ exports.createReservation = async (req, res) => {
         //Verificar que la habitacion este disponible segun la fecha ingresada por el user
         let transporte = await ReservationTransport.find({ transport: idTransport })
 
-        let validacion = await verificarFechas(transporte, startDate, endDate)
-        if (validacion === true) return res.status(418).send({ message: 'These dates are already taken' })
+        // let validacion = await verificarFechas(transporte, startDate, endDate)
+        // if (validacion === true) return res.status(418).send({ message: 'These dates are already taken' })
 
         console.log(transpor)
 

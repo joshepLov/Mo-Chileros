@@ -84,6 +84,7 @@ exports.createTravel = async (req, res) => {
     data.place = findRoute.place;
     data.capacity = findRoute.capacityMembers;
     data.route = findRoute._id;
+    data.cordinator = dataUser.sub
 
 
 
@@ -117,6 +118,24 @@ exports.getTravelsMochileros = async (req, res) => {
     // verificar si travel viene vacio
     if (travels.length == 0) return res.status(404).send({ message: "travels dont found" });
     return res.send({ message: travels });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({ message: "error getting travels" });
+  }
+};
+
+// obtener travel
+exports.getTravelsOneMochileros = async (req, res) => {
+  try {
+    let dataUser = req.user
+    //encontrar travel
+    let travels = await Travel.find({'members.user': dataUser.sub });
+    if (!travels) return res.status(404).send({ message: "travels dont found, create One!" });
+    console.log({travels});
+
+    // verificar si travel viene vacio
+    if (travels.length == 0) return res.status(404).send({ message: "travels dont found" });
+    return res.send({ travels });
   } catch (err) {
     console.log(err);
     return res.status(500).send({ message: "error getting travels" });

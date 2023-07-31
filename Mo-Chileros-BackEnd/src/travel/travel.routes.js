@@ -17,6 +17,7 @@ api.put('/addMember/:id/:userId', [ensureAuth], membersController.addMembers)
 //read 
 //mochileros 
 api.get('/getTravels', [ensureAuth], travelController.getTravelsMochileros)
+api.get('/getTravelsMochilero', [ensureAuth], travelController.getTravelsOneMochileros)
 api.get('/getTravel/:id', [ensureAuth], travelController.getTravelMochileros)
 api.get('/getMembers/:id', [ensureAuth], membersController.getMembers)
 // update 

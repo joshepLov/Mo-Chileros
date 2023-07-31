@@ -10,6 +10,7 @@ export const Room = () => {
 
     const routeParams = useRoute();
     const {routeId} = routeParams.params;
+    const {travel} = routeParams.params;
   //para esperar datos
   const [loading, setLoading] = useState(true)
   //ruta
@@ -22,9 +23,10 @@ export const Room = () => {
    
     let response = await axios.get(`http://192.168.1.9:3418/hotel/getRooms/${routeId}`)
     let data = response.data
-    console.log(data);
+    console.log(data, 'en rooms');
     setRoom(response.data.foundRooms)
-    console.log(room);
+    console.log(room, 'en habitaciones ');
+    console.log(travel, 'en habitaciones');
 
     setTimeout(()=> setLoading(false), 1000)
     
@@ -56,7 +58,9 @@ export const Room = () => {
           return (
 
             <CardRoute
-            navigate ={'HotelView'}
+            navigate ={'RoomReservation'}
+            idtravel={travel}
+            hotelId={routeId}
             idRoute={_id}
             placeName={name}
             caption={price}

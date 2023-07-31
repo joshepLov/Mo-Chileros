@@ -55,7 +55,7 @@ exports.getTransportsMochileros = async (req, res) => {
   try {
    
     //encontrar transportes
-    let transport = await Transport.find({status:true}).select('-_id -status');
+    let transport = await Transport.find({status:true}).select(' -status');
       if (!transport) return res.status(404).send({ message: "transport dont found" });
     // verificar si transport viene vacio
       if (transport.length == 0)  return res.status(404).send({ message: "transport dont found" });
