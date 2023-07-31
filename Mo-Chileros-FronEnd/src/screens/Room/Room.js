@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
 import { CardRoute } from '../../Components/CardRoute'
 import axios from 'axios';
 import {LOCAL_HOST} from '@env'
 import { Loading } from '../../Components/Loading';
 import { useRoute } from '@react-navigation/native';
+import {FloatingButtom} from '../../Components/FloatingButtom'
+import { AuthContext } from '../../../App';
+export const Room = ({id, idtravel}) => {
 
-export const Room = () => {
-
+  const { dataUser } = useContext(AuthContext)
     const routeParams = useRoute();
     const {routeId} = routeParams.params;
     const {travel} = routeParams.params;
@@ -16,7 +18,7 @@ export const Room = () => {
   //ruta
   const [room, setRoom] = useState([{}])
 
-
+console.log(routeId);
 //funcion obtener rutas
  const getTransport = async() =>{
   try {
@@ -54,22 +56,50 @@ export const Room = () => {
 
     
       {
-        room?.map(({_id, name,  capacity, price}, index)=>{
-          return (
+        room?.map(({_id, name,  capacity, price, image}, index)=>{
+          if(image == undefined){
+            return (
 
-            <CardRoute
-            navigate ={'RoomReservation'}
-            idtravel={travel}
-            hotelId={routeId}
-            idRoute={_id}
-            placeName={name}
-            caption={price}
-            ></CardRoute>
-            
-            )
+              <CardRoute
+              image={null}
+              schema={'hotel'}
+              schemaroute={'getImageRoom'}
+              navigate ={'RoomReservation'}
+              idtravel={travel}
+              hotelId={routeId}
+              idRoute={_id}
+              placeName={name}
+              caption={price}
+              ></CardRoute>
+              
+              )
+          }else {
+            return (
+
+              <CardRoute
+              image={image}
+              schema={'hotel'}
+              schemaroute={'getImageRoom'}
+              navigate ={'RoomReservation'}
+              idtravel={travel}
+              hotelId={routeId}
+              idRoute={_id}
+              placeName={name}
+              caption={price}
+              ></CardRoute>
+              
+              )
+          }
+          
         })
       }
       </ScrollView>
+      {dataUser.role == 'ADMIN' || dataUser.role == 'MODERADOR'?(
+        <FloatingButtom id={routeId} nav={'CreateRoom'}></FloatingButtom>
+        ):(
+          <></>
+          
+        )}
   </View>
 )
 }

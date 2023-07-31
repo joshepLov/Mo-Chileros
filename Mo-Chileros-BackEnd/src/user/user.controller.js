@@ -356,11 +356,17 @@ exports.addImage = async(req, res)=>{
               {image: fileName},
               {new: true}
           )
-          if(!updateUserImage) return res.status(404).send({message: 'user not found and not updated'});
+          if(!updateUserImage){ 
+            console.log('aca esta el error');
+            return res.status(404).send({message: 'user not found and not updated'});
+          
+        }
           return res.send({message: 'User updated', updateUserImage})
       }
       fs.unlinkSync(filePath)
-      return res.status(404).send({message: 'File extension cannot admited'});
+      return (
+        console.log('aca esta el error en el filepath'),
+        res.status(404).send({message: 'File extension cannot admited'}))
 
 
   }catch(err){

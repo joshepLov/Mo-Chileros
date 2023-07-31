@@ -46,7 +46,7 @@ api.get('/getImage/:fileName',upload, hotelController.getImage);
 // ===========================habitaciones
 // ===========================imagenes==============================================
 api.put('/uploadImageRoom/:id',uploadRoom, hotelController.addImageRoom);
-api.get('/getImageRoom/:fileName',uploadRoom, hotelController.getImage);
+api.get('/getImageRoom/:fileName',uploadRoom, hotelController.getImageRoom);
 
 
 module.exports = api

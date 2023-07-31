@@ -55,7 +55,7 @@ export const CreateTravel = () => {
       console.log(travelid);
       //validate message
         alert(data.message)
-        navigation.navigate('Hotels', {idTravel:travelid})
+        navigation.navigate('BlankHotel', {idTravel:travelid})
         
       
     } catch (e) {

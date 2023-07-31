@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
 import { CardRoute } from '../../Components/CardRoute'
 import axios from 'axios';
@@ -6,15 +6,16 @@ import {LOCAL_HOST} from '@env'
 import { Loading } from '../../Components/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRoute } from '@react-navigation/native';
+import { AuthContext } from '../../../App';
 
 export const Transport = () => {
+  const { dataUser } = useContext(AuthContext)
   //para esperar datos
   const [loading, setLoading] = useState(true)
   //ruta
   const [transporte, setTransporte] = useState([{}])
   const routeParams = useRoute();
   const {idTravel} = routeParams.params;
-  console.log(idTravel);
 
 //funcion obtener rutas
  const getTransport = async() =>{
@@ -54,23 +55,108 @@ export const Transport = () => {
   return (  
     <View style={styles.body}>
       <ScrollView>
-
-    
-      {
-        transporte?.map(({_id, name,  description}, index)=>{
-          return (
-
-            <CardRoute
-            navigate ={'TransportReservation'}
-            idtravel={idTravel}
-            idRoute={_id}
-            placeName={name}
-            caption={description}
-            ></CardRoute>
+    {
+      idTravel?(
+        <>
+        {
+          transporte?.map(({_id, name,  description, image}, index)=>{
+            if(image==null)
+           { return (
+              <CardRoute
+              key={index}
+              image={null}
+              navigate ={'TransportReservation'}
+              idtravel={idTravel}
+              idRoute={_id}
+              placeName={name}
+              caption={description}
+              ></CardRoute>
+              
+              )}
+              else{
+                <CardRoute
+                key={index}
+                image={image}
+                schema={'transport'}
+                schemaroute={'getImage'}
+                navigate ={'TransportReservation'}
+                idtravel={idTravel}
+                idRoute={_id}
+                placeName={name}
+                caption={description}
+                ></CardRoute>
+                
+              }
+            })
+          }
+          </>
+      ):(
+       <>
+        {
+          dataUser.role == 'ADMIN' || dataUser.role == 'MODERADOR' ?(
+            transporte?.map(({_id, name,  description, image}, index)=>{
             
-            )
-        })
-      }
+              if(image== null)
+              {return (
+    
+                <CardRoute
+                key={index}
+                image={null}
+                navigate ={'CreateTransport'}
+                idRoute={_id}
+                placeName={name}
+                caption={description}
+                ></CardRoute>
+                
+                )}
+                else{
+                  <CardRoute
+                  key={index}
+                  image={image}
+                  schema={'transport'}
+                  schemaroute={'getImage'}
+                  
+                  navigate ={'CreateTransport'}
+                  idRoute={_id}
+                  placeName={name}
+                  caption={description}
+                  ></CardRoute>
+                }
+              })
+          ):(
+            transporte?.map(({_id, name,  description, image}, index)=>{
+            
+              if(image== null)
+              {return (
+    
+                <CardRoute
+                key={index}
+                image={null}
+                idRoute={_id}
+                placeName={name}
+                caption={description}
+                ></CardRoute>
+                
+                )}
+                else{
+                  <CardRoute
+                  key={index}
+                  image={image}
+                  schema={'transport'}
+                  schemaroute={'getImage'}
+                  idRoute={_id}
+                  placeName={name}
+                  caption={description}
+                  ></CardRoute>
+                }
+              })
+          )
+          
+          }
+          </> 
+          )
+    }
+    
       </ScrollView>
   </View>
 )

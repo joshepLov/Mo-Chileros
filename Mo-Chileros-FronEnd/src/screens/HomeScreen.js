@@ -7,6 +7,7 @@ import axios from 'axios';
 import {LOCAL_HOST} from '@env'
 import mochila from '../../assets/backpack-load.gif'
 import { Loading } from '../Components/Loading';
+import { FloatingButtom } from '../Components/FloatingButtom';
 
 export const HomeScreen = ({ username, image, caption }) => {
   //para esperar datos
@@ -47,20 +48,42 @@ export const HomeScreen = ({ username, image, caption }) => {
 
       <Header></Header>
       {
-        routes?.map(({_id, description, place}, index)=>{
-          return (
+        routes?.map(({_id, description, place, image}, index)=>{
+          console.log(image);
+          if(image== undefined){
+            return (
 
-            <CardRoute
-            navigate={'RouteView'}
-            idRoute={_id}
-            placeName={place}
-            caption={description}
-            ></CardRoute>
-            
-            )
+              <CardRoute
+              key={index}
+              navigate={'RouteView'}
+              image={null}
+              idRoute={_id}
+              placeName={place}
+              caption={description}
+              ></CardRoute>
+              
+              )
+          }else {
+            console.log('este es el que sirve', image);
+            return (
+              
+              <CardRoute
+              key={index}
+              schema={'route'}
+              schemaroute={'getImage'}
+              image={image}
+              navigate={'RouteView'}
+              idRoute={_id}
+              placeName={place}
+              caption={description}
+              ></CardRoute>
+              
+              )
+            }
         })
       }
       </ScrollView>
+
   </View>
 )
 }

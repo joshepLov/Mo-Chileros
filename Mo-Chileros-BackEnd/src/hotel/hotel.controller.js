@@ -27,8 +27,10 @@ exports.createHotel = async (req, res) => {
 
     // validacion de datos
     let validateParams = validateData(params);
-    if (validateParams) return res.status(403).send(validateParams);
-
+    if (validateParams) {
+      console.log('aqui pasa algo');
+      return res.status(403).send(validateParams);
+}
     // verificar si existe un hotel
     let findHotel = await Hotel.findOne({
       or: [{ name: data.name }, { address: data.address }],
@@ -39,7 +41,7 @@ exports.createHotel = async (req, res) => {
     //creacion del hotel
     let hotel = new Hotel(data);
     await hotel.save();
-    return res.send({ message: "hotel created succesfuly", hotel });
+    return res.send({ hotel });
   } catch (err) {
     console.log(err);
     return res
@@ -55,6 +57,7 @@ exports.addRoom = async (req, res) => {
     let idHotel = req.params.id;
     let data = req.body;
 
+    console.log(data);
     // validacion de parametros
     let params = {
       name: data.name,
@@ -601,7 +604,7 @@ exports.addImageRoom = async(req, res)=>{
 }
 
 //obtener imagen habitacion
-exports.getImage = async(req, res)=>{
+exports.getImageRoom = async(req, res)=>{
   try{
       const fileName = req.params.fileName;
       const pathFile = `./uploads/Rooms/${fileName}`

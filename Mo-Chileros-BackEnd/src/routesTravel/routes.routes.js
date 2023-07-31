@@ -21,6 +21,6 @@ api.get('/getRoutesModerator', [ensureAuth,isModerator], routeController.getRout
 api.get('/getRouteModerator/:id', [ensureAuth, isModerator], routeController.getRouteModerator)
 
 api.put('/uploadImage/:idRoute', upload, routeController.addImageRoutes)
-api.get('/getImageRoom/:fileName', upload, routeController.getImage)
+api.get('/getImage/:fileName', upload, routeController.getImage)
 
 module.exports = api

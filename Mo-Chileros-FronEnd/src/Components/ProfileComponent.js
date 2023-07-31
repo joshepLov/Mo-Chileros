@@ -3,7 +3,6 @@ import { AuthContext } from '../../App'
 import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
-import Entypo from 'react-native-vector-icons/Entypo'
 import { useNavigation } from '@react-navigation/native';
 import {LOCAL_HOST} from '@env'
 import { Loading } from './Loading';
@@ -43,11 +42,6 @@ export const ProfileComponent = ({_id}) => {
 
  
 
-  //go to settings 
-  const goSettings =()=>{
-    navigation.navigate('Settings')
-  }
-
 
 
   useEffect(() => {
@@ -62,9 +56,6 @@ export const ProfileComponent = ({_id}) => {
     <View className='bg-white'>
       <ScrollView >
         <View style={styles.header}>
-          <View style={styles.icons}>
-            <Entypo name={'dots-three-horizontal'} color={'black'} size={30} style={styles.icon} onPress={goSettings}/>
-          </View>
 
           <>
             <Image

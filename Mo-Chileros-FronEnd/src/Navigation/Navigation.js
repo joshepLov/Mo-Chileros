@@ -1,11 +1,12 @@
-import * as React from 'react';
+import React, {useContext} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import {NavigationContainer} from '@react-navigation/native';
 import {useFonts} from 'expo-font'
+import { AuthContext } from '../../App';
 
 import { MaterialCommunityIcons, MaterialIcons,Foundation } from '@expo/vector-icons';
-import { FontAwesome, Entypo} from '@expo/vector-icons';
+import { FontAwesome5 ,FontAwesome, Entypo} from '@expo/vector-icons';
 
 import { HomeScreen } from '../screens/HomeScreen';
 import { LogInScreen } from '../screens/LogInScreen';
@@ -17,12 +18,14 @@ import { CalendarTest } from '../Components/CalendarTest';
 import { Hotel } from '../screens/Hotel/Hotel';
 import { Transport } from '../screens/Transport/Transport';
 import { GetTravel } from '../screens/Travel/GetTravell';
+import { CardRoute } from '../Components/CardRoute';
 
 const Tab = createBottomTabNavigator()
 // const Stack = createNativeStackNavigator();
 
 export default MyTabs = () => {
  
+  const {loggedIn, dataUser} = useContext(AuthContext)
 
     return (
       
@@ -52,23 +55,11 @@ export default MyTabs = () => {
     />
 
 
-    {/* Screen nuevo viaje */}
+   {
+    loggedIn == true? (
     <Tab.Screen 
       name ='Travel'
       component ={GetTravel}
-      options={{
-        tabBarInactiveTintColor: '#292262',
-        tabBarActiveTintColor: 'green',
-        tabBarIcon: ({color, size})=> (
-            <MaterialCommunityIcons name='airplane-plus'color={color} size={40}/>
-            )
-        }} 
-        />  
-
-    {/* {vista viaje actual} */}
-    <Tab.Screen 
-      name ='CurrentTravel'
-      component ={CalendarTest}
       options={{
         tabBarInactiveTintColor: '#292262',
         tabBarActiveTintColor: 'green',
@@ -77,6 +68,40 @@ export default MyTabs = () => {
           )
         }} 
         /> 
+
+    ):(<></>)
+   }
+
+   {
+    dataUser.role == 'ADMIN' || dataUser.role == 'MODERADOR'?  (
+      <>
+       <Tab.Screen 
+        name ='f'
+        component ={Transport}
+         options={{
+          tabBarInactiveTintColor: '#292262',
+          tabBarActiveTintColor: 'green',
+          tabBarIcon: ({color, size})=> (
+            <FontAwesome5 name='car-side'color={color} size={40}/>
+            )
+        }} 
+        />
+
+        <Tab.Screen 
+          name ='A'
+          component ={Hotel}
+              options={{
+                tabBarInactiveTintColor: '#292262',
+                tabBarActiveTintColor: 'green',
+                tabBarIcon: ({color, size})=> (
+                  <FontAwesome5 name="hotel" size={30} color={color} />
+                  )
+                }} 
+        />
+      </>
+    ):(<></>)
+   }
+  
     
     {/* Screen user  */}
     <Tab.Screen 

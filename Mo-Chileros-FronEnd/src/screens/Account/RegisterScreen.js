@@ -46,22 +46,30 @@ export const RegisterScreen = ({ navigation }) => {
       // save data
       let data = response.data;
       console.log(response.data)
-      console.log(data.id);
+      console.log(data.id, 'este es el id');
 
       if (data) {
+        console.log(profileImage);
+        
+        let ui = data.id
         if (profileImage) {
           let ext = profileImage.substring(profileImage.lastIndexOf('.') + 1)
+   
+
 
           const formData = new FormData()
           formData.append('image', {
-            name: `${data.id}.${ext}`,
+            name: `${ui}.${ext}`,
             uri: profileImage,
             type: 'image/jpeg'
           })
+        console.log(data, 'adentro de data3');
+
           console.log(formData);
-          await axios.put(`https://${LOCAL_HOST}/UploadImage/${data.id}`, formData, {
+         let img = await axios.put(`http://${LOCAL_HOST}/user/uploadImage/${data.id}`, formData, {
             headers: { Accept: 'application/json', 'Content-Type': 'multipart/form-data' }
           })
+          console.log(img.data, 'imagen');
         }
       }
 
@@ -77,7 +85,7 @@ export const RegisterScreen = ({ navigation }) => {
         alert('ocurrio un error en el registro, porfavor verifica tus datos')
       }
     } catch (e) {
-      console.log(e.response.data.message);
+      console.log(response.data.message);
       alert(data.message)
       return ('Error al iniciar sesión');
     }

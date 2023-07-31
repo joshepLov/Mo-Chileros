@@ -3,11 +3,10 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome, Foundation, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-const PLACEHOLDER_IMAGE_URL =
-  'https://media.traveler.es/photos/61377d2370e3cff8b85f9d8b/16:9/w_1200,h_675,c_limit/28469.jpg';
+import {LOCAL_HOST} from '@env'
 
-
-export const CardRoute = ({ photo, placeName, caption, ky, idRoute,idtravel, hotelId, navigate}) => {
+const logo_url =  '../../assets/logo-color.png'
+export const CardRoute = ({iconDesign, image,schema,schemaroute, placeName, caption, ky, idRoute,idtravel, hotelId, navigate, user}) => {
    
   const navigation = useNavigation();
   const [expanded, setExpanded] = useState(false);
@@ -20,7 +19,7 @@ export const CardRoute = ({ photo, placeName, caption, ky, idRoute,idtravel, hot
  
     const goToRoute = (idRoute)=>{
       if (navigate == 'Rooms' ) {
-        navigation.navigate(navigate, {routeId:idRoute, travel:idtravel})
+        navigation.navigate('Rooms', {routeId:idRoute, travel:idtravel})
 
         
       } else if( navigate == 'RouteView' ) {
@@ -44,26 +43,31 @@ export const CardRoute = ({ photo, placeName, caption, ky, idRoute,idtravel, hot
       }
     }
 
-  
-  
+  let url =`http://${LOCAL_HOST}/${schema}/${schemaroute}/${image}`
+  console.log(url);
 
   return (
     <View style={styles.postContainer}>
       <View style={styles.placeView}>
-        <Foundation name="flag" size={25} color="black" />
+        <FontAwesome name={iconDesign}size={25} color="black" />
         <View style={styles.namePlace}>
           <Text style={styles.placeText}>{placeName}</Text>
-          <Text style={styles.nameText}>este es un texto</Text>
+          <Text style={styles.nameText}>{user}</Text>
         </View>
       </View>
       <TouchableOpacity onPress={()=>goToRoute(idRoute)} key={ky}>
-      <Image source={{ uri: PLACEHOLDER_IMAGE_URL }} style={styles.postImage} />
+      {image ? (
+        <Image source={{ uri: `http://${LOCAL_HOST}/${schema}/${schemaroute}/${image}` }} style={styles.postImage} />
+      ) : (
+        <Image source={require('../../assets/logo-color.png')} style={styles.postImage} />
+      )}
+      
       </TouchableOpacity>
       <View style={styles.mainNameView}>
         <View style={styles.nameView}>
           <Text style={styles.username}>{placeName}</Text>
         </View>
-        <MaterialIcons name="bookmark" size={24} color="black" />
+    
       </View>
       {expanded ? (
         <Text style={styles.caption}>{caption}</Text>

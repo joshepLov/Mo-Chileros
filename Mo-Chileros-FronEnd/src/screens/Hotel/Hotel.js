@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext} from 'react'
 import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
 import { CardRoute } from '../../Components/CardRoute'
 import axios from 'axios';
 import {LOCAL_HOST} from '@env'
 import { Loading } from '../../Components/Loading';
-import { useRoute } from '@react-navigation/native';
+import { AuthContext } from '../../../App'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FloatingButtom } from '../../Components/FloatingButtom';
 
-export const Hotel = ({ username, image, caption }) => {
+export const Hotel = ({id}) => {
+
+  const { dataUser } = useContext(AuthContext)
   //para esperar datos
   const [loading, setLoading] = useState(true)
   //ruta
@@ -16,13 +20,31 @@ export const Hotel = ({ username, image, caption }) => {
 //funcion obtener rutas
  const getHotels = async() =>{
   try {
+    console.log(dataUser);
+    if(dataUser.role == 'ADMIN'|| dataUser.role == 'MODERADOR'){
+
+            //headers para listar y obtener permisos 
+            const token = await AsyncStorage.getItem('token')
+            const headers = {
+              'Content-Type': 'application/json',
+              'Authorization': token
+            }
+      let response = await axios.get(`http://192.168.1.9:3418/hotel/getHotelsModerator`, {headers:headers})
+      let data = response.data
+ 
+      setHotel(response.data.hotels)
+   
+  
+      setTimeout(()=> setLoading(false), 1000)
+
+    }else {
     let response = await axios.get(`http://192.168.1.9:3418/hotel/getHotels`)
     let data = response.data
     console.log(data);
     setHotel(response.data.hotels)
     console.log(hotel);
 
-    setTimeout(()=> setLoading(false), 1000)
+    setTimeout(()=> setLoading(false), 1000)}
     
   } catch (err) {
     console.log(err)
@@ -31,8 +53,8 @@ export const Hotel = ({ username, image, caption }) => {
 
  }
 
- const routeParams = useRoute();
- const {idTravel}= routeParams.params;
+//  const routeParams = useRoute();
+//  const {idTravel}= routeParams.params;
 
 
  useEffect(()=>{
@@ -48,28 +70,94 @@ export const Hotel = ({ username, image, caption }) => {
   
   return (  
     <View style={styles.body}>
+
       <ScrollView>
     
       {
-        hotel?.map(({_id, name,  description}, index)=>{
-          return (
-
-            <CardRoute
-            navigate ={'Rooms'}
-            idRoute={_id}
-            idtravel={idTravel}
-            placeName={name}
-            caption={description}
-            ></CardRoute>
+        dataUser.role == 'ADMIN' || dataUser.role=='MODERAROR'?
+       ( hotel?.map(({_id, name,  description, image}, index)=>{
+          console.log('admin');  
+          if(image == undefined){
+            return (
+              <CardRoute
+              iconDesign={'hotel'}
+              image={null}
+              schema={'hotel'}
+              schemaroute={'getImage'}
+              navigate ={'Rooms'}
+              idRoute={_id}
+              idtravel={id}
+              placeName={name}
+              caption={description}
+              ></CardRoute>
+              
+                
             
-            )
-        })
-      }
+                )
+          }else{
+            return (
+              <CardRoute
+              iconDesign={'hotel'}
+              image={image}
+              schema={'hotel'}
+              schemaroute={'getImage'}
+              navigate ={'Rooms'}
+              idRoute={_id}
+              idtravel={id}
+              placeName={name}
+              caption={description}
+              ></CardRoute>
+
+                )
+          }
+          })
+          ):(
+            hotel?.map(({_id, name,  description, image}, index)=>{
+              console.log('no admin');
+              if (image == null) {
+                return (
+                  <CardRoute
+                  iconDesign={'hotel'}
+                  image={null}
+                  schema={'hotel'}
+                  schemaroute={'getImage'}
+                  navigate ={'Rooms'}
+                  idRoute={_id}
+                  placeName={name}
+                  caption={description}
+                  ></CardRoute>
+                  
+                  )
+              }else{
+
+                return (
+                  <CardRoute
+                iconDesign={'hotel'}
+                image={image}
+                schema={'hotel'}
+                schemaroute={'getImage'}
+                navigate ={'Rooms'}
+                idRoute={_id}
+                placeName={name}
+                caption={description}
+                ></CardRoute>
+                
+                )
+              }
+              })
+              )
+        }
       </ScrollView>
+      {dataUser.role == 'ADMIN' || dataUser.role == 'MODERADOR'?(
+        <FloatingButtom nav={'Hotel'}></FloatingButtom>
+        ):(
+          <></>
+          
+        )}
   </View>
 )
 }
-
+//a
 const styles = StyleSheet.create({
   gif:{
     height: '50%', 
@@ -114,5 +202,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     fontFamily: 'Caesar Dressing'
+  },
+  float:{
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'yellow',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 8, // Sombra en Android
   },
 });
