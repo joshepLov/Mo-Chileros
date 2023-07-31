@@ -6,7 +6,6 @@ import {  AuthContext } from '../../../App';
 
 export const Route = ({navigation}) => {
 
-const [loading, setLoading] = useState(true)
 
     
     const { dataUser } = useContext(AuthContext)
@@ -30,9 +29,8 @@ const [loading, setLoading] = useState(true)
       role={rol}/>
     
     ):(
-      <RouteComponentt
+        <RouteComponentt
       routeId ={routeId}
-      role={''}
       />
     )
   }

@@ -1,22 +1,22 @@
 import React, {useState, useEffect, } from 'react';
-import { View, Image, Text, StyleSheet,  ScrollView, Button} from 'react-native';
+import { View, Image, Text, StyleSheet,  ScrollView, TouchableOpacity} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LOCAL_HOST } from '@env'
 import { Loading } from './Loading';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export const RouteComponentt = ({routeId, role}) => {
     const navigation = useNavigation();
     
-    const imagePhoto = '../../assets/logo-color.png'
+    const imagePhoto = 'https://nuevomundo.gt/cms/img/articulos/antigua-guatemala-es-el-mejor-destino-de-centroamerica-para-visitar-114658-114841.jpg'
     const [route, setRoute] = useState()
     const [user, setUser] = useState()
     const [loading, setLoading] = useState(true)
     
-    //  const routeParams = useRoute();
-//  const {idTravel}= routeParams.params;
+    
     
     //funcion para obtener Ruta
     const getRoute = async () => {
@@ -38,18 +38,19 @@ export const RouteComponentt = ({routeId, role}) => {
                 setRoute(response.data.route);
                 //esperar datos
                 setTimeout(()=> setLoading(false), 1000);
-            }else if(role== undefined|| role==''){
+            }else{
 
-              console.log(routeId);
+              console.log('adentro');
                 let response = await axios.get(`http://${LOCAL_HOST}/route/getRoute/${routeId}`);
-                let data = response.data
-                setRoute(response.data.route);
-                console.log(route);
-                // console.log(response.data.route);
+                console.log(response.data.route);
                 //setear data
-                // console.log(route, 'no quiere');
+                setRoute(response.data.route);
                 //esperar datos
+                if(route == undefined){}
+                setRoute(response.data.route);
+
                 setTimeout(()=> setLoading(false), 1000);
+               
             }
         } catch (err) {
             console.error(err);
@@ -76,15 +77,24 @@ export const RouteComponentt = ({routeId, role}) => {
       }
     };
 
+    
+  const renderStars = (score) => {
+    const stars = [];
+    for (let i = 0; i < score; i++) {
+      stars.push(
+        <MaterialIcons key={i} name="star" size={12} color="#FDAF01" />
+      );
+    }
+    return stars;
+  };
+
+
     const goTo = (routeId)=>{
         navigation.navigate('CreateTravel', {route:routeId})
     }
 
         useEffect(() => {
-          const fetchData = async ()=>{
-            await getRoute();
-          };
-          fetchData();
+            getRoute();
         }, []);     
 
         if(loading) return(<Loading/>)
@@ -92,15 +102,15 @@ export const RouteComponentt = ({routeId, role}) => {
         return (
             <ScrollView style={styles.container}>
               {/* Imagen de la ruta */}
-              <Image source={{ uri: imagePhoto }} style={styles.image} />
+              <Image source={{ uri: `http://${LOCAL_HOST}/route/getImage/${route.image}` }} style={styles.image} />
         
               {/* Detalles de la ruta */}
               <View style={styles.detailsContainer}>
                 <Text style={styles.name}>{route.name}</Text>
                 <Text style={styles.place}>{route.place}</Text>
                 <View style={styles.ratingContainer}>
-                  <Text style={styles.score}>{route.score}</Text>
-                  <Text style={styles.ratingText}>Puntuación</Text>
+                  <Text style={styles.ratingText}>Puntuación:  </Text>
+                {renderStars(route.score)}
                 </View>
                 <Text style={styles.price}>Precio por noche: ${route.price}</Text>
                 <Text style={styles.capacity}>Capacidad: {route.capacityMembers} personas</Text>
@@ -117,7 +127,11 @@ export const RouteComponentt = ({routeId, role}) => {
                     </Text>
                   ))}
                 </View> */}
-                <Button onPress={()=>{goTo(routeId)}} title='press me'> </Button>
+
+        <TouchableOpacity style={styles.button} onPress={()=>{goTo(routeId)}}>
+          <Text style={styles.buttonText}>Viaja Y conoce!</Text>
+        </TouchableOpacity>
+             
               </View>
             </ScrollView>
           );
@@ -192,5 +206,15 @@ export const RouteComponentt = ({routeId, role}) => {
             fontSize: 16,
             marginBottom: 4,
             color: '#555',
+          },
+          button: {
+            backgroundColor: '#FDAF01',
+            borderRadius: 120,
+            paddingVertical: 12,
+          },
+          buttonText: {
+            color: 'white',
+            fontSize: 16,
+            textAlign: 'center',
           },
         });

@@ -97,7 +97,7 @@ export const CreateRoom = () => {
       
  
         <TouchableOpacity style={styles.button} onPress={createRoom}>
-          <Text style={styles.buttonText}>Nuevo viaje</Text>
+          <Text style={styles.buttonText}>Nueva Habitacion</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

@@ -73,7 +73,7 @@ exports.getRouteMochilero = async (req, res) => {
     try {
         let idroute = req.params.id; 
         // find route 
-        let route = await Route.find({_id:idroute ,status: true }).select(' -status')
+        let route = await Route.findOne({_id:idroute ,status: true }).select(' -status')
         //sino existe 
         if (!route) return res.send({ message: 'doesnt exist route, create One!' })
 
@@ -103,6 +103,24 @@ exports.getRoutesModereator = async (req,res) =>{
 }
 
 
+//Obtener Ruta
+exports.getRouteModerator = async (req,res) =>{
+    try {
+        let idroute = req.params.id; 
+
+        
+        // find route 
+        let route = await Route.findOne({_id:idroute})
+        //sino existe 
+        if(!route) return res.send ({ message:'doesnt exist route, create One!'})
+
+        return res.send ({route})
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({message: 'Server Error, try later'})
+        
+    }
+}
 //Agregar imagenes para rutas
 exports.addImageRoutes = async (req, res) => {
     try {
@@ -144,24 +162,6 @@ exports.addImageRoutes = async (req, res) => {
 }
 
 
-//Obtener Ruta
-exports.getRouteModerator = async (req,res) =>{
-    try {
-        let idroute = req.params.id; 
-
-        
-        // find route 
-        let route = await Route.findOne({_id:idroute})
-        //sino existe 
-        if(!route) return res.send ({ message:'doesnt exist route, create One!'})
-
-        return res.send ({route})
-    } catch (err) {
-        console.log(err)
-        return res.status(500).send({message: 'Server Error, try later'})
-        
-    }
-}
 
 
 //Obtener la imagen de la ruta
